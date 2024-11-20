@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DBK Auto - Garage à Pierrefitte-sur-Seine</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>DBK Auto</h1>
+    <p>Garage à Pierrefitte-sur-Seine - Vente de voitures d'occasion</p>
+  </header>
+
+  <nav>
+    <a href="#catalogue">Nos véhicules</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  <main>
+    <!-- Section d'accueil -->
+    <section id="hero">
+      <h2>Découvrez nos véhicules d'occasion</h2>
+      <p>Qualité garantie au meilleur prix.</p>
+    </section>
+
+    <!-- Catalogue -->
+    <section id="catalogue">
+      <h2>Catalogue de véhicules</h2>
+      <!-- Outil de filtrage -->
+      <div class="filter">
+        <label for="brand">Marque :</label>
+        <select id="brand">
+          <option value="all">Toutes</option>
+          <option value="toyota">Toyota</option>
+          <option value="bmw">BMW</option>
+          <option value="audi">Audi</option>
+        </select>
+
+        <label for="model">Modèle :</label>
+        <input type="text" id="model" placeholder="Rechercher un modèle">
+
+        <label for="price">Prix max :</label>
+        <input type="number" id="price" placeholder="Prix maximum">
+
+        <button onclick="filterCars()">Filtrer</button>
+      </div>
+
+      <!-- Liste des voitures -->
+      <div class="cars" id="car-list">
+        <!-- Exemple de carte de voiture -->
+        <div class="car" data-brand="toyota" data-model="corolla" data-price="15000">
+          <h3>Toyota Corolla</h3>
+          <p>Prix : 15 000 €</p>
+        </div>
+        <div class="car" data-brand="bmw" data-model="x5" data-price="25000">
+          <h3>BMW X5</h3>
+          <p>Prix : 25 000 €</p>
+        </div>
+        <div class="car" data-brand="audi" data-model="a4" data-price="20000">
+          <h3>Audi A4</h3>
+          <p>Prix : 20 000 €</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact">
+      <h2>Contactez-nous</h2>
+      <p>Adresse : 12 Rue de l'Auto, Pierrefitte-sur-Seine</p>
+      <p>Téléphone : 01 23 45 67 89</p>
+      <p>Email : contact@dbkauto.fr</p>
+      <form>
+        <label for="name">Nom :</label>
+        <input type="text" id="name" required>
+
+        <label for="message">Message :</label>
+        <textarea id="message" rows="4" required></textarea>
+
+        <button type="submit">Envoyer</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2024 DBK Auto. Tous droits réservés.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
