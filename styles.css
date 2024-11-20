@@ -31,7 +31,7 @@ p {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: space-between;
-  flex-wrap: wrap;
+  flex-wrap: wrap; /* Assure une réorganisation si nécessaire */
 }
 
 h2 {
@@ -40,8 +40,8 @@ h2 {
 }
 
 .filter {
-  margin: 0 15px;
-  flex: 1 1 20%; /* Chaque filtre aura une largeur égale, et prendra 20% de l'espace */
+  margin: 10px;
+  flex: 1 1 200px; /* Chaque filtre aura une largeur minimale de 200px */
 }
 
 .filter label {
@@ -51,7 +51,7 @@ h2 {
 }
 
 .filter select, .filter input {
-  width: 100%;
+  width: 100%; /* Les champs filtrants prennent toute la largeur de leur parent */
   padding: 10px;
   font-size: 1em;
   margin-top: 5px;
@@ -102,7 +102,7 @@ button:hover {
 #filters {
   display: flex;
   flex-wrap: wrap;  /* Permet aux filtres de se réorganiser si la largeur de l'écran est trop petite */
-  gap: 15px;  /* Espace entre les filtres */
+  gap: 20px;  /* Espace entre les filtres */
 }
 
 .filter {
