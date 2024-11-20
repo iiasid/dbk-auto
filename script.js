@@ -13,9 +13,42 @@ const brandToModels = {
 };
 
 // Fonction pour mettre à jour la liste des modèles en fonction de la marque
-document.getElementById('brand').addEventListener('change', (e) => {
-  const modelsDropdown = document.getElementById('model');
-  const selectedBrand = e.target.value;
+document.getElementById('brand').addEventListener('change', function() {
+  var brand = this.value;
+  var modelSelect = document.getElementById('model');
+  modelSelect.innerHTML = '<option value="">-- Choisir un modèle --</option>';
+
+  if (brand) {
+    modelSelect.removeAttribute('disabled');
+    let models = [];
+
+    switch (brand) {
+      case 'Toyota':
+        models = ['Yaris', 'Corolla', 'Hilux'];
+        break;
+      case 'BMW':
+        models = ['X2', '3 Series', 'X5'];
+        break;
+      case 'Renault':
+        models = ['Twingo', 'Clio', 'Megane'];
+        break;
+      case 'Mercedes':
+        models = ['A-Class', 'B-Class', 'C-Class'];
+        break;
+      // Ajouter d'autres marques ici...
+    }
+
+    models.forEach(function(model) {
+      var option = document.createElement('option');
+      option.value = model;
+      option.textContent = model;
+      modelSelect.appendChild(option);
+    });
+  } else {
+    modelSelect.setAttribute('disabled', true);
+  }
+});
+
 
   // Vider le modèle actuel
   modelsDropdown.innerHTML = '<option value="">-- Choisir un modèle --</option>';
