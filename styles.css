@@ -29,6 +29,8 @@ p {
   padding: 20px;
   margin: 20px 10%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
 }
 
 h2 {
@@ -37,7 +39,8 @@ h2 {
 }
 
 .filter {
-  margin-bottom: 15px;
+  flex: 1;
+  margin: 0 10px;
 }
 
 .filter label {
@@ -91,4 +94,22 @@ button:hover {
   padding: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
-  text
+  text-align: center;
+}
+
+/* Filtre horizontal */
+#filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.filter {
+  flex: 1;
+}
+
+.filter select, .filter input {
+  width: calc(100% - 20px); /* ajuste la taille des éléments filtrants */
+}
+
