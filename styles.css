@@ -31,7 +31,8 @@ p {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: space-between;
-  flex-wrap: wrap; /* Assure une réorganisation si nécessaire */
+  gap: 20px; /* Espace entre les filtres */
+  flex-wrap: wrap;
 }
 
 h2 {
@@ -98,7 +99,7 @@ button:hover {
   text-align: center;
 }
 
-/* Filtre horizontal */
+/* Assurer un affichage horizontal et responsive des filtres */
 #filters {
   display: flex;
   flex-wrap: wrap;  /* Permet aux filtres de se réorganiser si la largeur de l'écran est trop petite */
@@ -106,9 +107,9 @@ button:hover {
 }
 
 .filter {
-  flex: 1 1 200px; /* Chaque filtre prend un maximum de 200px mais peut se réorganiser */
+  flex: 1 1 200px; /* Chaque filtre prendra au moins 200px */
 }
 
 .filter select, .filter input {
-  width: 100%;  /* Rendre les champs de filtrage à pleine largeur du conteneur */
+  width: 100%;
 }
