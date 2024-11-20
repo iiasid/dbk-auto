@@ -16,7 +16,7 @@ const brandToModels = {
 document.getElementById('brand').addEventListener('change', (e) => {
   const modelsDropdown = document.getElementById('model');
   const selectedBrand = e.target.value;
-  
+
   // Vider le modèle actuel
   modelsDropdown.innerHTML = '<option value="">-- Choisir un modèle --</option>';
 
