@@ -31,10 +31,24 @@ document.addEventListener('DOMContentLoaded', function () {
       console.log('Données récupérées depuis Airtable :', data);
       
       annonces = data.records.map(record => {
+        let marque = "";
+        if (record.fields.Marque) {
+          if (Array.isArray(record.fields.Marque) && record.fields.Marque.length > 0) {
+            marque = record.fields.Marque[0].toLowerCase().trim(); // Extraire la première valeur du tableau lié
+          }
+        }
+
+        let modele = "";
+        if (record.fields.Modèle) {
+          if (Array.isArray(record.fields.Modèle) && record.fields.Modèle.length > 0) {
+            modele = record.fields.Modèle[0].toLowerCase().trim(); // Extraire la première valeur du tableau lié
+          }
+        }
+
         return {
           id: record.id,
-          marque: record.fields.Marque ? record.fields.Marque.toLowerCase().trim() : "",
-          modele: record.fields.Modèle ? record.fields.Modèle.toLowerCase().trim() : "",
+          marque: marque,
+          modele: modele,
           annee: record.fields.Année,
           boite: record.fields.Boîte ? record.fields.Boîte.toLowerCase().trim() : "",
           prix: record.fields.Prix,
