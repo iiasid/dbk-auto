@@ -37,8 +37,12 @@
   <script>
     // Charger toutes les annonces lors du chargement de la page Annonces
     document.addEventListener('DOMContentLoaded', async function () {
-      await fetchAnnonces();  // Assurez-vous que cette fonction est définie dans le script.js
-      displayAnnonces(annonces);  // Utilise la liste des annonces récupérée pour les afficher
+      if (window.fetchAnnonces && window.displayAnnonces) {
+        await fetchAnnonces();
+        displayAnnonces(window.annonces);
+      } else {
+        console.error('Les fonctions fetchAnnonces et displayAnnonces ne sont pas définies');
+      }
     });
   </script>
 </body>
