@@ -18,12 +18,13 @@ document.addEventListener('DOMContentLoaded', function () {
     })
     .then(data => {
       annonces = data;
+      displayAnnonces(annonces); // Afficher toutes les annonces par défaut
     })
     .catch(error => console.error('Erreur lors du chargement des annonces :', error));
 
   // Mettre à jour la liste des modèles selon la marque
   brandSelect.addEventListener('change', function () {
-    const brand = brandSelect.value;
+    const brand = brandSelect.value.toLowerCase();
     modelSelect.innerHTML = '<option value="">-- Choisir un modèle --</option>';
     modelSelect.disabled = true;
 
@@ -50,9 +51,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Appliquer les filtres et afficher les annonces
   filterButton.addEventListener('click', function () {
-    const selectedBrand = brandSelect.value;
-    const selectedModel = modelSelect.value;
-    const selectedGearbox = gearboxSelect.value;
+    const selectedBrand = brandSelect.value.toLowerCase();
+    const selectedModel = modelSelect.value.toLowerCase();
+    const selectedGearbox = gearboxSelect.value.toLowerCase();
     const maxPrice = parseFloat(priceInput.value);
 
     const filteredAnnonces = annonces.filter(annonce => {
