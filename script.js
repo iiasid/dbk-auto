@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   let annonces = [];
 
-  // Charger les annonces depuis le JSON
+  // Charger les annonces depuis le fichier JSON
   fetch('annonces.json')
     .then(response => {
       if (!response.ok) {
@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', function () {
     })
     .then(data => {
       annonces = data;
-      console.log('Annonces chargées :', annonces); // Log des annonces pour vérifier la récupération
       displayAnnonces(annonces); // Afficher toutes les annonces par défaut
     })
     .catch(error => {
@@ -26,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
       annoncesDiv.innerHTML = '<p>Erreur lors du chargement des annonces. Veuillez réessayer plus tard.</p>';
     });
 
-  // Mise à jour de la liste des modèles selon la marque
+  // Mettre à jour la liste des modèles en fonction de la marque sélectionnée
   brandSelect.addEventListener('change', function () {
     const brand = brandSelect.value.toLowerCase();
     modelSelect.innerHTML = '<option value="">-- Choisir un modèle --</option>';
@@ -60,16 +59,17 @@ document.addEventListener('DOMContentLoaded', function () {
     const selectedGearbox = gearboxSelect.value.toLowerCase();
     const maxPrice = parseFloat(priceInput.value);
 
+    // Filtrer les annonces selon les critères sélectionnés
     const filteredAnnonces = annonces.filter(annonce => {
-      const matchesBrand = selectedBrand ? annonce.marque === selectedBrand : true;
+      const matchesBrand = selectedBrand ? annonce.marque.toLowerCase() === selectedBrand : true;
       const matchesModel = selectedModel ? annonce.modele.toLowerCase() === selectedModel : true;
-      const matchesGearbox = selectedGearbox ? annonce.boite === selectedGearbox : true;
+      const matchesGearbox = selectedGearbox ? annonce.boite.toLowerCase() === selectedGearbox : true;
       const matchesPrice = !isNaN(maxPrice) ? annonce.prix <= maxPrice : true;
 
+      // Retourner true pour chaque annonce si aucun filtre n'est appliqué
       return matchesBrand && matchesModel && matchesGearbox && matchesPrice;
     });
 
-    console.log('Annonces filtrées :', filteredAnnonces); // Log pour vérifier le filtrage
     displayAnnonces(filteredAnnonces);
   });
 
