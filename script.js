@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', async function () {
-  const brandSelect = document.getElementById('brand');
-  const modelSelect = document.getElementById('model');
+  const brandSelect = document.getElementById('Marque');
+  const modelSelect = document.getElementById('Modele');
   const gearboxSelect = document.getElementById('gearbox');
   const priceInput = document.getElementById('price');
   const filterButton = document.getElementById('filter-btn');
