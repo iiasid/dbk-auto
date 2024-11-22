@@ -91,6 +91,14 @@ button:hover {
   margin-top: 20px;
 }
 
+.car {
+  background-color: #f8f8f8;
+  padding: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  text-align: center;
+}
+
 .car-card {
   border: 1px solid #ccc;
   border-radius: 5px;
