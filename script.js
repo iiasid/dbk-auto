@@ -117,6 +117,13 @@ document.addEventListener('DOMContentLoaded', function () {
       return matchesBrand && matchesModel && matchesGearbox && matchesPrice;
     });
 
+    if (filteredAnnonces.length === 0 && !selectedBrand && !selectedModel && !selectedGearbox && isNaN(maxPrice)) {
+      displayAnnonces(annonces);
+    } else {
+      displayAnnonces(filteredAnnonces);
+    }
+    });
+
     // Afficher toutes les annonces si aucun filtre n'est appliqué
     if (!selectedBrand && !selectedModel && !selectedGearbox && isNaN(maxPrice)) {
       displayAnnonces(annonces);
