@@ -10,9 +10,13 @@ document.addEventListener('DOMContentLoaded', async function () {
   // Informations d'accès Airtable
   const apiKey = 'patvWkfPXlYuM1jjN.cfb1c14a851bf57bd07ab645882e6362d9a88c833608abe53faffd1ddd6f1e44';
   const apiUrlAnnonces = `https://api.airtable.com/v0/apprRBKlK2tlPjFa4/Annonces`;
+  const apiUrlMarques = `https://api.airtable.com/v0/apprRBKlK2tlPjFa4/Marques`;
+  const apiUrlModeles = `https://api.airtable.com/v0/apprRBKlK2tlPjFa4/Modèles`;
 
-  // Stockage des annonces
+  // Stockage des annonces, marques, et modèles
   let annonces = [];
+  let marquesDict = {};  // Pour mapper les IDs des marques aux noms
+  let modelesDict = {};  // Pour mapper les IDs des modèles aux noms
 
   // Fonction pour récupérer les données depuis Airtable
   async function fetchData(url) {
@@ -36,15 +40,37 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
   }
 
-  // Charger les annonces depuis Airtable et extraire les marques et modèles
+  // Charger les marques et les stocker dans un dictionnaire
+  async function fetchMarques() {
+    const records = await fetchData(apiUrlMarques);
+    records.forEach(record => {
+      marquesDict[record.id] = record.fields['Nom de la Marque'];
+    });
+    console.log('Dictionnaire des marques :', marquesDict);
+  }
+
+  // Charger les modèles et les stocker dans un dictionnaire
+  async function fetchModeles() {
+    const records = await fetchData(apiUrlModeles);
+    records.forEach(record => {
+      modelesDict[record.id] = record.fields['Nom du Modèle'];
+    });
+    console.log('Dictionnaire des modèles :', modelesDict);
+  }
+
+  // Charger les annonces depuis Airtable et remplacer les IDs par les noms
   async function fetchAnnonces() {
     const records = await fetchData(apiUrlAnnonces);
     annonces = records.map(record => {
+      // Récupérer les noms réels des marques et modèles à partir des dictionnaires
+      let marque = Array.isArray(record.fields['Marque']) ? marquesDict[record.fields['Marque'][0]] : '';
+      let modele = Array.isArray(record.fields['Modèle']) ? modelesDict[record.fields['Modèle'][0]] : '';
+
       return {
         id: record.id,
         titre: record.fields['Titre'] || 'Titre non disponible',
-        marque: Array.isArray(record.fields['Marque']) ? record.fields['Marque'][0] : record.fields['Marque'],
-        modele: Array.isArray(record.fields['Modèle']) ? record.fields['Modèle'][0] : record.fields['Modèle'],
+        marque: marque,
+        modele: modele,
         annee: record.fields['Année'],
         boite: record.fields['Boîte'] || "",
         prix: record.fields['Prix'],
@@ -163,6 +189,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
   }
 
-  // Charger les annonces au démarrage
+  // Charger les données au démarrage
+  await fetchMarques();
+  await fetchModeles();
   await fetchAnnonces();
 });
