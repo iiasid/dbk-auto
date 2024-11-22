@@ -108,7 +108,18 @@ document.addEventListener('DOMContentLoaded', async function () {
 
   // Fonction pour afficher les annonces
   function displayAnnonces(data) {
+    // Comparez les données actuelles avec les précédentes pour éviter des mises à jour inutiles
+    if (JSON.stringify(data) === JSON.stringify(annoncesDiv.dataset.previousData)) {
+      console.log("Aucune modification détectée, pas de redessin nécessaire");
+      return; // Si rien n'a changé, ne faites rien
+    }
+
+    // Enregistrez les données actuelles pour la prochaine comparaison
+    annoncesDiv.dataset.previousData = JSON.stringify(data);
+
+    // Mise à jour optimisée du DOM
     annoncesDiv.innerHTML = ''; // Vider les annonces précédentes
+
     if (data.length > 0) {
       data.forEach(annonce => {
         const card = document.createElement('div');
