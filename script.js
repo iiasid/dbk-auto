@@ -6,11 +6,9 @@ document.addEventListener('DOMContentLoaded', function () {
   const filterButton = document.getElementById('filter-btn');
   const annoncesDiv = document.getElementById('annonces');
 
-  // Jeton d'accès personnel Airtable et ID de la base
-  const apiKey = 'patLyS8zsrdPL46Q4.1d111902f9b96763a3f74e5c3aaa07003672b80e67486965609cfa02e741fdb3';
-  const baseId = 'appRBKlK2tlPjFa4'; // ID exact de la base Airtable
-  const tableName = 'Cars'; // Nom exact de la table dans Airtable
-  const apiUrl = `https://api.airtable.com/v0/${baseId}/${tableName}`;
+  // Jeton d'accès personnel Airtable et URL statique pour vérifier le problème
+  const apiKey = 'patmQzCIsVZH3FB1L.b4500b60eb73c8251ba79f24c23f70466a8a33df05ffb65343ac019369fa5f48';
+  const apiUrl = `https://api.airtable.com/v0/apprRBKlK2tlPjFa4/Cars`; // URL complète avec baseId et tableName
 
   let annonces = [];
 
