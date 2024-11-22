@@ -148,6 +148,13 @@ document.addEventListener('DOMContentLoaded', async function () {
     const selectedGearbox = gearboxSelect.value.toLowerCase().trim();
     const maxPrice = parseFloat(priceInput.value);
 
+    console.log('Filtres sélectionnés :', {
+      selectedBrand,
+      selectedModel,
+      selectedGearbox,
+      maxPrice
+    }); // Debugging step
+
     // Filtrer les annonces en fonction des critères sélectionnés
     const filteredAnnonces = annonces.filter(annonce => {
       const matchesBrand = selectedBrand ? annonce.marque === selectedBrand : true;
