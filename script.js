@@ -6,26 +6,59 @@ document.addEventListener('DOMContentLoaded', function () {
   const filterButton = document.getElementById('filter-btn');
   const annoncesDiv = document.getElementById('annonces');
 
-  let annonces = [];
+  // Les annonces intégrées directement dans le code JavaScript
+  const annonces = [
+    {
+      "id": 1,
+      "marque": "toyota",
+      "modele": "Yaris",
+      "annee": 2009,
+      "boite": "manuelle",
+      "prix": 6000,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/c/c7/Toyota_Yaris_Hybrid_Premiere_Edition.jpg"
+    },
+    {
+      "id": 2,
+      "marque": "bmw",
+      "modele": "X2",
+      "annee": 2020,
+      "boite": "automatique",
+      "prix": 35000,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/f/f8/BMW_X2_M35i_%28F39%29_IMG_2178.jpg"
+    },
+    {
+      "id": 3,
+      "marque": "renault",
+      "modele": "Twingo",
+      "annee": 2018,
+      "boite": "manuelle",
+      "prix": 9000,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/7/7f/Renault_Twingo_III_Zen_%E2%80%93_Frontansicht%2C_17._M%C3%A4rz_2014%2C_D%C3%BCsseldorf.jpg"
+    },
+    {
+      "id": 4,
+      "marque": "mercedes",
+      "modele": "C220",
+      "annee": 2009,
+      "boite": "automatique",
+      "prix": 24300,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/8/85/2011_Mercedes-Benz_C_220_CDI_Sport_Edition_%28W_204%29_sedan_%282011-10-28%29_01.jpg"
+    },
+    {
+      "id": 5,
+      "marque": "renault",
+      "modele": "Express",
+      "annee": 1990,
+      "boite": "manuelle",
+      "prix": 1500,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/3/38/Renault_Express_rear_20081120.jpg"
+    }
+  ];
 
-  // Charger les annonces depuis le fichier JSON
-  fetch('annonces.json')
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then(data => {
-      annonces = data;
-      displayAnnonces(annonces); // Afficher toutes les annonces par défaut
-    })
-    .catch(error => {
-      console.error('Erreur lors du chargement des annonces :', error);
-      annoncesDiv.innerHTML = '<p>Erreur lors du chargement des annonces. Veuillez réessayer plus tard.</p>';
-    });
+  // Afficher les annonces par défaut lors du chargement de la page
+  displayAnnonces(annonces);
 
-  // Mettre à jour la liste des modèles en fonction de la marque sélectionnée
+  // Mise à jour de la liste des modèles selon la marque
   brandSelect.addEventListener('change', function () {
     const brand = brandSelect.value.toLowerCase();
     modelSelect.innerHTML = '<option value="">-- Choisir un modèle --</option>';
@@ -61,12 +94,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Filtrer les annonces selon les critères sélectionnés
     const filteredAnnonces = annonces.filter(annonce => {
-      const matchesBrand = selectedBrand ? annonce.marque.toLowerCase() === selectedBrand : true;
+      const matchesBrand = selectedBrand ? annonce.marque === selectedBrand : true;
       const matchesModel = selectedModel ? annonce.modele.toLowerCase() === selectedModel : true;
       const matchesGearbox = selectedGearbox ? annonce.boite.toLowerCase() === selectedGearbox : true;
       const matchesPrice = !isNaN(maxPrice) ? annonce.prix <= maxPrice : true;
 
-      // Retourner true pour chaque annonce si aucun filtre n'est appliqué
       return matchesBrand && matchesModel && matchesGearbox && matchesPrice;
     });
 
