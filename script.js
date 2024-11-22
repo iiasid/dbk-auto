@@ -85,10 +85,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
       await fetchAnnonces(); // Assurez-vous de récupérer les annonces avant de filtrer
 
-      const selectedBrand = brandSelect.value.toLowerCase().trim();
-      const selectedModel = modelSelect.value.toLowerCase().trim();
-      const selectedGearbox = gearboxSelect.value.toLowerCase().trim();
-      const maxPrice = parseFloat(priceInput.value);
+      const selectedBrand = brandSelect ? brandSelect.value.toLowerCase().trim() : '';
+      const selectedModel = modelSelect ? modelSelect.value.toLowerCase().trim() : '';
+      const selectedGearbox = gearboxSelect ? gearboxSelect.value.toLowerCase().trim() : '';
+      const maxPrice = parseFloat(priceInput ? priceInput.value : '');
 
       // Filtrer les annonces selon les critères sélectionnés
       const filteredAnnonces = annonces.filter(annonce => {
