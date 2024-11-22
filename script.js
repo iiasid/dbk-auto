@@ -6,59 +6,50 @@ document.addEventListener('DOMContentLoaded', function () {
   const filterButton = document.getElementById('filter-btn');
   const annoncesDiv = document.getElementById('annonces');
 
-  // Les annonces intégrées directement dans le code JavaScript
-  const annonces = [
-    {
-      "id": 1,
-      "marque": "toyota",
-      "modele": "Yaris",
-      "annee": 2009,
-      "boite": "manuelle",
-      "prix": 6000,
-      "image": "https://upload.wikimedia.org/wikipedia/commons/c/c7/Toyota_Yaris_Hybrid_Premiere_Edition.jpg"
-    },
-    {
-      "id": 2,
-      "marque": "bmw",
-      "modele": "X2",
-      "annee": 2020,
-      "boite": "automatique",
-      "prix": 35000,
-      "image": "https://upload.wikimedia.org/wikipedia/commons/f/f8/BMW_X2_M35i_%28F39%29_IMG_2178.jpg"
-    },
-    {
-      "id": 3,
-      "marque": "renault",
-      "modele": "Twingo",
-      "annee": 2018,
-      "boite": "manuelle",
-      "prix": 9000,
-      "image": "https://upload.wikimedia.org/wikipedia/commons/7/7f/Renault_Twingo_III_Zen_%E2%80%93_Frontansicht%2C_17._M%C3%A4rz_2014%2C_D%C3%BCsseldorf.jpg"
-    },
-    {
-      "id": 4,
-      "marque": "mercedes",
-      "modele": "C220",
-      "annee": 2009,
-      "boite": "automatique",
-      "prix": 24300,
-      "image": "https://upload.wikimedia.org/wikipedia/commons/8/85/2011_Mercedes-Benz_C_220_CDI_Sport_Edition_%28W_204%29_sedan_%282011-10-28%29_01.jpg"
-    },
-    {
-      "id": 5,
-      "marque": "renault",
-      "modele": "Express",
-      "annee": 1990,
-      "boite": "manuelle",
-      "prix": 1500,
-      "image": "https://upload.wikimedia.org/wikipedia/commons/3/38/Renault_Express_rear_20081120.jpg"
+  // Jeton d'accès personnel Airtable et ID de la base
+  const apiKey = 'patLyS8zsrdPL46Q4.1d111902f9b96763a3f74e5c3aaa07003672b80e67486965609cfa02e741fdb3';
+  const baseId = 'appXXXXXXXXXXXXXXXX'; // Remplacez par l'ID de votre base Airtable
+  const tableName = 'Cars'; // Nom de la table dans Airtable
+  const apiUrl = `https://api.airtable.com/v0/${baseId}/${tableName}`;
+
+  let annonces = [];
+
+  // Fonction pour récupérer les données depuis Airtable
+  async function fetchAnnonces() {
+    try {
+      const response = await fetch(apiUrl, {
+        headers: {
+          Authorization: `Bearer ${apiKey}`
+        }
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      annonces = data.records.map(record => {
+        return {
+          id: record.id,
+          marque: record.fields.Marque.toLowerCase(),
+          modele: record.fields.Modèle.toLowerCase(),
+          annee: record.fields.Année,
+          boite: record.fields.Boîte.toLowerCase(),
+          prix: record.fields.Prix,
+          image: record.fields.Image ? record.fields.Image[0].url : 'images/placeholder.jpg'
+        };
+      });
+      console.log('Annonces récupérées depuis Airtable :', annonces);
+    } catch (error) {
+      console.error('Erreur lors du chargement des annonces depuis Airtable :', error);
+      annoncesDiv.innerHTML = '<p>Erreur lors du chargement des annonces. Veuillez réessayer plus tard.</p>';
     }
-  ];
+  }
 
   // Événement pour appliquer les filtres et afficher les annonces filtrées
-  filterButton.addEventListener('click', function (event) {
+  filterButton.addEventListener('click', async function (event) {
     event.preventDefault(); // Empêche la page de se rafraîchir automatiquement
-    console.log('Bouton "Appliquer les filtres" cliqué'); // Log pour vérifier que le clic est bien détecté
+    console.log('Bouton "Appliquer les filtres" cliqué');
+
+    await fetchAnnonces(); // Assurez-vous de récupérer les annonces avant de filtrer
 
     const selectedBrand = brandSelect.value.toLowerCase();
     const selectedModel = modelSelect.value.toLowerCase();
@@ -68,8 +59,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // Filtrer les annonces selon les critères sélectionnés
     const filteredAnnonces = annonces.filter(annonce => {
       const matchesBrand = selectedBrand ? annonce.marque === selectedBrand : true;
-      const matchesModel = selectedModel ? annonce.modele.toLowerCase() === selectedModel : true;
-      const matchesGearbox = selectedGearbox ? annonce.boite.toLowerCase() === selectedGearbox : true;
+      const matchesModel = selectedModel ? annonce.modele === selectedModel : true;
+      const matchesGearbox = selectedGearbox ? annonce.boite === selectedGearbox : true;
       const matchesPrice = !isNaN(maxPrice) ? annonce.prix <= maxPrice : true;
 
       return matchesBrand && matchesModel && matchesGearbox && matchesPrice;
