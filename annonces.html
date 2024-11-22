@@ -10,16 +10,20 @@
 
   <!-- En-tête du site avec logo et menu de navigation -->
   <header>
-    <div class="logo-container">
-      <img src="images/logo.png" alt="Logo de DBK Auto" class="logo">
+    <div class="header-container">
+      <div class="logo-container">
+        <a href="index.html">
+          <img src="images/logo.png" alt="Logo de DBK Auto" class="logo">
+        </a>
+      </div>
+      <nav class="menu">
+        <ul>
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="annonces.html">Annonces</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
     </div>
-    <nav class="menu">
-      <ul>
-        <li><a href="index.html">Accueil</a></li>
-        <li><a href="annonces.html">Annonces</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
-    </nav>
   </header>
 
   <!-- Section du catalogue des annonces -->
@@ -31,9 +35,10 @@
   <!-- Appel du script JS -->
   <script src="script.js"></script>
   <script>
-    // Charger toutes les annonces lors du chargement de la page
+    // Charger toutes les annonces lors du chargement de la page Annonces
     document.addEventListener('DOMContentLoaded', async function () {
-      await fetchAnnonces();  // Cette fonction doit être accessible globalement depuis script.js
+      await fetchAnnonces();  // Assurez-vous que cette fonction est définie dans le script.js
+      displayAnnonces(annonces);  // Utilise la liste des annonces récupérée pour les afficher
     });
   </script>
 </body>
