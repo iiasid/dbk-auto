@@ -9,9 +9,9 @@ document.addEventListener('DOMContentLoaded', function () {
   // Jeton d'accès personnel Airtable et URL de l'API
   const apiKey = 'patvWkfPXlYuM1jjN.cfb1c14a851bf57bd07ab645882e6362d9a88c833608abe53faffd1ddd6f1e44';
   const baseId = 'apprRBKlK2tlPjFa4';
-  const marquesUrl = `https://api.airtable.com/v0/${baseId}/Marques`;
-  const modelesUrl = `https://api.airtable.com/v0/${baseId}/Modèles`;
-  const annoncesUrl = `https://api.airtable.com/v0/${baseId}/Annonces`;
+  const marquesUrl = `https://api.airtable.com/v0/${apprRBKlK2tlPjFa4}/Marques`;
+  const modelesUrl = `https://api.airtable.com/v0/${apprRBKlK2tlPjFa4}/Modèles`;
+  const annoncesUrl = `https://api.airtable.com/v0/${apprRBKlK2tlPjFa4}/Annonces`;
 
   let annonces = [];
 
