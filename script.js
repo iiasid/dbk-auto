@@ -18,11 +18,15 @@ document.addEventListener('DOMContentLoaded', function () {
     })
     .then(data => {
       annonces = data;
+      console.log('Annonces chargées :', annonces); // Log des annonces pour vérifier la récupération
       displayAnnonces(annonces); // Afficher toutes les annonces par défaut
     })
-    .catch(error => console.error('Erreur lors du chargement des annonces :', error));
+    .catch(error => {
+      console.error('Erreur lors du chargement des annonces :', error);
+      annoncesDiv.innerHTML = '<p>Erreur lors du chargement des annonces. Veuillez réessayer plus tard.</p>';
+    });
 
-  // Mettre à jour la liste des modèles selon la marque
+  // Mise à jour de la liste des modèles selon la marque
   brandSelect.addEventListener('change', function () {
     const brand = brandSelect.value.toLowerCase();
     modelSelect.innerHTML = '<option value="">-- Choisir un modèle --</option>';
@@ -49,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
-  // Appliquer les filtres et afficher les annonces
+  // Appliquer les filtres et afficher les annonces filtrées
   filterButton.addEventListener('click', function () {
     const selectedBrand = brandSelect.value.toLowerCase();
     const selectedModel = modelSelect.value.toLowerCase();
@@ -65,11 +69,13 @@ document.addEventListener('DOMContentLoaded', function () {
       return matchesBrand && matchesModel && matchesGearbox && matchesPrice;
     });
 
+    console.log('Annonces filtrées :', filteredAnnonces); // Log pour vérifier le filtrage
     displayAnnonces(filteredAnnonces);
   });
 
+  // Fonction pour afficher les annonces
   function displayAnnonces(data) {
-    annoncesDiv.innerHTML = '';
+    annoncesDiv.innerHTML = ''; // Vider les annonces précédentes
     if (data.length > 0) {
       data.forEach(annonce => {
         const card = document.createElement('div');
