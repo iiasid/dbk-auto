@@ -55,10 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   ];
 
-  // Afficher les annonces par défaut lors du chargement de la page
-  displayAnnonces(annonces);
-
-  // Appliquer les filtres et afficher les annonces filtrées
+  // Événement pour appliquer les filtres et afficher les annonces filtrées
   filterButton.addEventListener('click', function (event) {
     event.preventDefault(); // Empêche la page de se rafraîchir automatiquement
     console.log('Bouton "Appliquer les filtres" cliqué'); // Log pour vérifier que le clic est bien détecté
