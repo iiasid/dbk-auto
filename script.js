@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', async function () {
   const brandSelect = document.getElementById('brand');
   const modelSelect = document.getElementById('model');
   const gearboxSelect = document.getElementById('gearbox');
@@ -29,21 +29,23 @@ document.addEventListener('DOMContentLoaded', function () {
 
       const data = await response.json();
       console.log('Données récupérées depuis Airtable :', data);
-      
+
       annonces = data.records.map(record => {
         let marque = "";
         if (record.fields.Marque) {
           if (Array.isArray(record.fields.Marque) && record.fields.Marque.length > 0) {
-            marque = record.fields.Marque[0].toLowerCase().trim(); // Extraire la première valeur du tableau lié
+            marque = record.fields.Marque[0].toLowerCase().trim();
           }
         }
 
         let modele = "";
         if (record.fields.Modèle) {
           if (Array.isArray(record.fields.Modèle) && record.fields.Modèle.length > 0) {
-            modele = record.fields.Modèle[0].toLowerCase().trim(); // Extraire la première valeur du tableau lié
+            modele = record.fields.Modèle[0].toLowerCase().trim();
           }
         }
+
+        console.log(`Marque : ${marque}, Modèle : ${modele}`); // Log pour vérifier
 
         return {
           id: record.id,
@@ -57,53 +59,21 @@ document.addEventListener('DOMContentLoaded', function () {
       });
 
       console.log('Annonces après traitement :', annonces);
+      displayAnnonces(annonces); // Afficher toutes les annonces une première fois
+
     } catch (error) {
       console.error('Erreur lors du chargement des annonces depuis Airtable :', error);
       annoncesDiv.innerHTML = '<p>Erreur lors du chargement des annonces. Veuillez réessayer plus tard.</p>';
     }
   }
 
-  // Activer le filtre des modèles en fonction de la marque sélectionnée
-  brandSelect.addEventListener('change', function () {
-    const selectedBrand = brandSelect.value.toLowerCase().trim();
-    console.log('Marque sélectionnée :', selectedBrand);
+  // Charger les annonces une seule fois au démarrage
+  await fetchAnnonces();
 
-    // Vider la liste des modèles précédents
-    modelSelect.innerHTML = '';
-
-    // Filtrer les annonces pour obtenir les modèles disponibles pour la marque sélectionnée
-    const models = annonces
-      .filter(annonce => annonce.marque === selectedBrand)
-      .map(annonce => annonce.modele);
-
-    // Supprimer les doublons et trier les modèles
-    const uniqueModels = [...new Set(models)].sort();
-
-    // Ajouter une option vide par défaut
-    const defaultOption = document.createElement('option');
-    defaultOption.value = '';
-    defaultOption.textContent = 'Choisir un modèle';
-    modelSelect.appendChild(defaultOption);
-
-    // Ajouter les modèles à la liste déroulante
-    uniqueModels.forEach(model => {
-      const option = document.createElement('option');
-      option.value = model;
-      option.textContent = model.charAt(0).toUpperCase() + model.slice(1);
-      modelSelect.appendChild(option);
-    });
-
-    // Activer le filtre des modèles
-    modelSelect.disabled = uniqueModels.length === 0;
-    console.log('Modèles disponibles mis à jour :', uniqueModels);
-  });
-
-  // Événement pour appliquer les filtres et afficher les annonces filtrées
-  filterButton.addEventListener('click', async function (event) {
+  // Appliquer les filtres sans recharger les annonces depuis Airtable
+  filterButton.addEventListener('click', function (event) {
     event.preventDefault(); // Empêche la page de se rafraîchir automatiquement
     console.log('Bouton "Appliquer les filtres" cliqué');
-
-    await fetchAnnonces(); // Assurez-vous de récupérer les annonces avant de filtrer
 
     const selectedBrand = brandSelect.value.toLowerCase().trim();
     const selectedModel = modelSelect.value.toLowerCase().trim();
@@ -133,10 +103,10 @@ document.addEventListener('DOMContentLoaded', function () {
         card.className = 'car-card';
         card.innerHTML = `
           <img src="${annonce.image}" alt="${annonce.modele}" onerror="this.src='images/placeholder.jpg';" />
-          <h3>${annonce.marque.toUpperCase()} ${annonce.modele}</h3>
+          <h3>${annonce.marque ? annonce.marque.toUpperCase() : 'Marque inconnue'} ${annonce.modele ? annonce.modele : 'Modèle inconnu'}</h3>
           <p>Année : ${annonce.annee}</p>
           <p>Boîte : ${annonce.boite}</p>
-          <p>Prix : ${annonce.prix.toLocaleString()} €</p>
+          <p>Prix : ${typeof annonce.prix === 'number' ? annonce.prix.toLocaleString() : 'Prix non disponible'} €</p>
         `;
         annoncesDiv.appendChild(card);
       });
