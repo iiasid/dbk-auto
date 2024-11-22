@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // Charger les marques et remplir le filtre des marques
   async function loadBrands() {
     const marques = await fetchData(marquesUrl);
-    brandSelect.innerHTML = ''; // Vider les choix de marques précédents // Vider les choix de marques précédents // Option par défaut
+    brandSelect.innerHTML = '<option value="">Toutes les marques</option>'; // Option par défaut // Vider les choix de marques précédents // Option par défaut
 
     marques.forEach(marque => {
       const option = document.createElement('option');
@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // Charger les modèles et remplir le filtre des modèles
   async function loadModels(brand = '') {
     const modeles = await fetchData(modelesUrl);
-    modelSelect.innerHTML = ''; // Vider les choix de modèles précédents // Option par défaut
+    modelSelect.innerHTML = '<option value="">Tous les modèles</option>'; // Option par défaut // Option par défaut
 
     // Filtrer les modèles selon la marque sélectionnée
     const filteredModels = brand
@@ -115,6 +115,14 @@ document.addEventListener('DOMContentLoaded', function () {
       const matchesPrice = !isNaN(maxPrice) ? annonce.fields.Prix <= maxPrice : true;
 
       return matchesBrand && matchesModel && matchesGearbox && matchesPrice;
+    });
+
+    // Afficher toutes les annonces si aucun filtre n'est appliqué
+    if (!selectedBrand && !selectedModel && !selectedGearbox && isNaN(maxPrice)) {
+      displayAnnonces(annonces);
+    } else {
+      displayAnnonces(filteredAnnonces);
+    }
     });
 
     console.log('Annonces filtrées :', filteredAnnonces);
