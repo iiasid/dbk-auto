@@ -12,6 +12,7 @@ header {
   background-color: #0d6efd;
   color: white;
   padding: 10px 20px;
+  position: relative; /* Assurez-vous que le header est bien positionné */
 }
 
 .header-container {
@@ -45,8 +46,9 @@ header {
   border: none;
   color: white;
   cursor: pointer;
-  position: relative; /* S'assurer qu'il est positionné correctement */
-  z-index: 10; /* Le placer au-dessus du reste pour qu'il soit visible */
+  position: absolute;
+  right: 20px; /* Assurez-vous que le burger est bien aligné à droite */
+  z-index: 10; /* Assurez-vous que le bouton est bien au-dessus des autres éléments */
 }
 
 /* Menu de navigation (desktop) */
@@ -83,6 +85,14 @@ header {
 
 /* Styles spécifiques pour mobile (max-width: 768px) */
 @media (max-width: 768px) {
+  .header-container {
+    position: relative;
+  }
+
+  .burger-menu {
+    display: block; /* Afficher le bouton menu burger sur mobile */
+  }
+
   .menu {
     display: none; /* Cacher le menu de navigation par défaut sur mobile */
     position: absolute;
@@ -91,16 +101,14 @@ header {
     background-color: #0d6efd;
     padding: 20px;
     border-radius: 8px;
+    width: 200px; /* Ajuster la largeur du menu en fonction de la taille de l'écran */
+    z-index: 5; /* S'assurer que le menu est au-dessus des autres éléments, mais en dessous du bouton */
   }
 
   .menu ul {
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
-  }
-
-  .burger-menu {
-    display: block; /* Afficher le bouton menu burger sur mobile */
   }
 
   .menu.show {
