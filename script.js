@@ -6,15 +6,17 @@ document.addEventListener('DOMContentLoaded', function () {
   const filterButton = document.getElementById('filter-btn');
   const annoncesDiv = document.getElementById('annonces');
 
-  const annonces = [
-    { brand: 'Toyota', model: 'Yaris', year: 2009, gearbox: 'manuelle', price: 6000, img: 'toyota-yaris.jpg' },
-    { brand: 'BMW', model: 'X2', year: 2020, gearbox: 'automatique', price: 35000, img: 'bmw-x2.jpg' },
-    { brand: 'Renault', model: 'Twingo', year: 2018, gearbox: 'manuelle', price: 9000, img: 'renault-twingo.jpg' },
-    { brand: 'Mercedes', model: 'C220', year: 2009, gearbox: 'automatique', price: 24300, img: 'mercedes-c220.jpg' },
-    { brand: 'Renault', model: 'Express', year: 1990, gearbox: 'manuelle', price: 1500, img: 'renault-express.jpg' },
-  ];
+  // Charger les annonces depuis le JSON
+  let annonces = [];
 
-  // Populate model options dynamically based on brand selection
+  fetch('annonces.json')
+    .then(response => response.json())
+    .then(data => {
+      annonces = data;
+    })
+    .catch(error => console.error('Erreur lors du chargement des annonces :', error));
+
+  // Remplir la liste des modèles en fonction de la marque
   brandSelect.addEventListener('change', function () {
     const brand = brandSelect.value;
     modelSelect.innerHTML = '<option value="">-- Choisir un modèle --</option>';
@@ -25,17 +27,17 @@ document.addEventListener('DOMContentLoaded', function () {
       let models = [];
 
       switch (brand) {
-        case 'Toyota':
+        case 'toyota':
           models = ['Yaris', 'Corolla', 'Hilux', 'Land Cruiser', 'Auris'];
           break;
-        case 'BMW':
+        case 'bmw':
           models = ['X2', '3 Series', 'X5', 'M3', 'Z4'];
           break;
-        case 'Renault':
+        case 'renault':
           models = ['Twingo', 'Clio', 'Megane', 'Scenic', 'Express'];
           break;
-        case 'Mercedes':
-          models = ['C-Class', 'E-Class', 'S-Class', 'C220', 'A-Class'];
+        case 'mercedes':
+          models = ['C220', 'E-Class', 'S-Class', 'C-Class', 'A-Class'];
           break;
         default:
           models = [];
@@ -43,49 +45,53 @@ document.addEventListener('DOMContentLoaded', function () {
 
       models.forEach(function (model) {
         const option = document.createElement('option');
-        option.value = model;
+        option.value = model.toLowerCase();
         option.textContent = model;
         modelSelect.appendChild(option);
       });
     }
   });
 
-  // Function to filter and display results
+  // Appliquer les filtres et afficher les annonces
   filterButton.addEventListener('click', function () {
     const selectedBrand = brandSelect.value;
     const selectedModel = modelSelect.value;
     const selectedGearbox = gearboxSelect.value;
     const maxPrice = parseFloat(priceInput.value);
 
-    // Clear previous results
-    annoncesDiv.innerHTML = '';
-
-    // Filter annonces based on selected criteria
+    // Filtrer les annonces
     const filteredAnnonces = annonces.filter(function (annonce) {
-      const matchesBrand = selectedBrand ? annonce.brand === selectedBrand : true;
-      const matchesModel = selectedModel ? annonce.model === selectedModel : true;
-      const matchesGearbox = selectedGearbox ? annonce.gearbox === selectedGearbox : true;
-      const matchesPrice = !isNaN(maxPrice) ? annonce.price <= maxPrice : true;
+      const matchesBrand = selectedBrand ? annonce.marque === selectedBrand : true;
+      const matchesModel = selectedModel ? annonce.modele.toLowerCase() === selectedModel : true;
+      const matchesGearbox = selectedGearbox ? annonce.boite === selectedGearbox : true;
+      const matchesPrice = !isNaN(maxPrice) ? annonce.prix <= maxPrice : true;
 
       return matchesBrand && matchesModel && matchesGearbox && matchesPrice;
     });
 
-    // Display results
-    if (filteredAnnonces.length > 0) {
-      filteredAnnonces.forEach(function (annonce) {
+    // Afficher les annonces filtrées
+    displayAnnonces(filteredAnnonces);
+  });
+
+  // Fonction pour afficher les annonces
+  function displayAnnonces(data) {
+    annoncesDiv.innerHTML = '';
+
+    if (data.length > 0) {
+      data.forEach(function (annonce) {
         const card = document.createElement('div');
         card.className = 'car-card';
         card.innerHTML = `
-          <img src="images/${annonce.img}" alt="${annonce.model}" />
-          <h3>${annonce.brand} ${annonce.model}</h3>
-          <p>Année: ${annonce.year}</p>
-          <p>Boîte: ${annonce.gearbox}</p>
-          <p>Prix: ${annonce.price} €</p>
+          <img src="${annonce.image}" alt="${annonce.modele}" />
+          <h3>${annonce.marque.toUpperCase()} ${annonce.modele}</h3>
+          <p>Année : ${annonce.annee}</p>
+          <p>Boîte : ${annonce.boite}</p>
+          <p>Prix : ${annonce.prix.toLocaleString()} €</p>
         `;
         annoncesDiv.appendChild(card);
       });
     } else {
       annoncesDiv.innerHTML = '<p>Aucune annonce ne correspond à vos critères.</p>';
     }
-  });
+  }
 });
