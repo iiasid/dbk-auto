@@ -58,35 +58,11 @@ document.addEventListener('DOMContentLoaded', function () {
   // Afficher les annonces par défaut lors du chargement de la page
   displayAnnonces(annonces);
 
-  // Mise à jour de la liste des modèles selon la marque
-  brandSelect.addEventListener('change', function () {
-    const brand = brandSelect.value.toLowerCase();
-    modelSelect.innerHTML = '<option value="">-- Choisir un modèle --</option>';
-    modelSelect.disabled = true;
-
-    if (brand) {
-      modelSelect.disabled = false;
-
-      const models = {
-        toyota: ['Yaris', 'Corolla', 'Hilux', 'Land Cruiser', 'Auris'],
-        bmw: ['X2', '3 Series', 'X5', 'M3', 'Z4'],
-        renault: ['Twingo', 'Clio', 'Megane', 'Scenic', 'Express'],
-        mercedes: ['C220', 'E-Class', 'S-Class', 'C-Class', 'A-Class'],
-        peugeot: ['208', '3008', '508', '5008', 'Partner']
-      };
-
-      const selectedModels = models[brand] || [];
-      selectedModels.forEach(model => {
-        const option = document.createElement('option');
-        option.value = model.toLowerCase();
-        option.textContent = model;
-        modelSelect.appendChild(option);
-      });
-    }
-  });
-
   // Appliquer les filtres et afficher les annonces filtrées
-  filterButton.addEventListener('click', function () {
+  filterButton.addEventListener('click', function (event) {
+    event.preventDefault(); // Empêche la page de se rafraîchir automatiquement
+    console.log('Bouton "Appliquer les filtres" cliqué'); // Log pour vérifier que le clic est bien détecté
+
     const selectedBrand = brandSelect.value.toLowerCase();
     const selectedModel = modelSelect.value.toLowerCase();
     const selectedGearbox = gearboxSelect.value.toLowerCase();
@@ -102,6 +78,7 @@ document.addEventListener('DOMContentLoaded', function () {
       return matchesBrand && matchesModel && matchesGearbox && matchesPrice;
     });
 
+    console.log('Annonces filtrées :', filteredAnnonces); // Log pour vérifier les annonces filtrées
     displayAnnonces(filteredAnnonces);
   });
 
