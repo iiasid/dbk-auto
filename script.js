@@ -49,6 +49,41 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
+  // Activer le filtre des modèles en fonction de la marque sélectionnée
+  brandSelect.addEventListener('change', function () {
+    const selectedBrand = brandSelect.value.toLowerCase().trim();
+    console.log('Marque sélectionnée :', selectedBrand);
+
+    // Vider la liste des modèles précédents
+    modelSelect.innerHTML = '';
+
+    // Filtrer les annonces pour obtenir les modèles disponibles pour la marque sélectionnée
+    const models = annonces
+      .filter(annonce => annonce.marque === selectedBrand)
+      .map(annonce => annonce.modele);
+
+    // Supprimer les doublons et trier les modèles
+    const uniqueModels = [...new Set(models)].sort();
+
+    // Ajouter une option vide par défaut
+    const defaultOption = document.createElement('option');
+    defaultOption.value = '';
+    defaultOption.textContent = 'Choisir un modèle';
+    modelSelect.appendChild(defaultOption);
+
+    // Ajouter les modèles à la liste déroulante
+    uniqueModels.forEach(model => {
+      const option = document.createElement('option');
+      option.value = model;
+      option.textContent = model.charAt(0).toUpperCase() + model.slice(1);
+      modelSelect.appendChild(option);
+    });
+
+    // Activer le filtre des modèles
+    modelSelect.disabled = uniqueModels.length === 0;
+    console.log('Modèles disponibles mis à jour :', uniqueModels);
+  });
+
   // Événement pour appliquer les filtres et afficher les annonces filtrées
   filterButton.addEventListener('click', async function (event) {
     event.preventDefault(); // Empêche la page de se rafraîchir automatiquement
