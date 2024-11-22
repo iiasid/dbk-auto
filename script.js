@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Jeton d'accès personnel Airtable et URL statique pour vérifier le problème
   const apiKey = 'patmQzCIsVZH3FB1L.b4500b60eb73c8251ba79f24c23f70466a8a33df05ffb65343ac019369fa5f48';
-  const apiUrl = `https://api.airtable.com/v0/apprRBKlK2tlPjFa4/Cars`; // URL complète avec baseId et tableName
+  const apiUrl = `https://api.airtable.com/v0/apprRBKlK2tlPjFa4/Annonces`; // URL complète avec baseId et tableName
 
   let annonces = [];
 
