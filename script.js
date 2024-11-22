@@ -6,74 +6,123 @@ document.addEventListener('DOMContentLoaded', function () {
   const filterButton = document.getElementById('filter-btn');
   const annoncesDiv = document.getElementById('annonces');
 
+  // Jeton d'accès personnel Airtable et URL statique pour vérifier le problème
   const apiKey = 'patvWkfPXlYuM1jjN.cfb1c14a851bf57bd07ab645882e6362d9a88c833608abe53faffd1ddd6f1e44';
-  const baseId = 'apprRBKlK2tlPjFa4';
-  const marquesUrl = `https://api.airtable.com/v0/apprRBKlK2tlPjFa4/Marques`;
-  const modelesUrl = `https://api.airtable.com/v0/apprRBKlK2tlPjFa4/Modèles`;
-  const annoncesUrl = `https://api.airtable.com/v0/apprRBKlK2tlPjFa4/Annonces`;
+  const apiUrl = `https://api.airtable.com/v0/apprRBKlK2tlPjFa4/Annonces`; // URL complète avec baseId et tableName
 
   let annonces = [];
 
-  async function fetchData(url) {
+  // Fonction pour récupérer les données depuis Airtable
+  async function fetchAnnonces() {
     try {
-      const response = await fetch(url, {
+      console.log('Tentative de récupération des annonces depuis Airtable...');
+      const response = await fetch(apiUrl, {
         headers: {
-          Authorization: `Bearer patvWkfPXlYuM1jjN.cfb1c14a851bf57bd07ab645882e6362d9a88c833608abe53faffd1ddd6f1e44`
+          Authorization: `Bearer ${apiKey}`
         }
       });
-      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+      console.log('Réponse reçue :', response);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
       const data = await response.json();
-      return data.records;
+      console.log('Données récupérées depuis Airtable :', data);
+      
+      annonces = data.records.map(record => {
+        return {
+          id: record.id,
+          marque: record.fields.Marque ? record.fields.Marque.toLowerCase().trim() : "",
+          modele: record.fields.Modèle ? record.fields.Modèle.toLowerCase().trim() : "",
+          annee: record.fields.Année,
+          boite: record.fields.Boîte ? record.fields.Boîte.toLowerCase().trim() : "",
+          prix: record.fields.Prix,
+          image: record.fields.Image ? record.fields.Image[0].url : 'images/placeholder.jpg'
+        };
+      });
+
+      console.log('Annonces après traitement :', annonces);
     } catch (error) {
-      console.error('Erreur lors du chargement des données depuis Airtable :', error);
-      return [];
+      console.error('Erreur lors du chargement des annonces depuis Airtable :', error);
+      annoncesDiv.innerHTML = '<p>Erreur lors du chargement des annonces. Veuillez réessayer plus tard.</p>';
     }
   }
 
-  async function loadBrands() {
-    const marques = await fetchData(marquesUrl);
-    brandSelect.innerHTML = '<option value="">Toutes les marques</option>';
-    marques.forEach(marque => {
-      const option = document.createElement('option');
-      option.value = marque.fields['Nom de la Marque'].toLowerCase();
-      option.textContent = marque.fields['Nom de la Marque'];
-      brandSelect.appendChild(option);
-    });
-  }
+  // Activer le filtre des modèles en fonction de la marque sélectionnée
+  brandSelect.addEventListener('change', function () {
+    const selectedBrand = brandSelect.value.toLowerCase().trim();
+    console.log('Marque sélectionnée :', selectedBrand);
 
-  async function loadModels(brand = '') {
-    const modeles = await fetchData(modelesUrl);
-    modelSelect.innerHTML = '<option value="">Tous les modèles</option>';
-    const filteredModels = brand
-      ? modeles.filter(modele => modele.fields['Marque Associée'].toLowerCase() === brand)
-      : modeles;
+    // Vider la liste des modèles précédents
+    modelSelect.innerHTML = '';
 
-    filteredModels.forEach(modele => {
+    // Filtrer les annonces pour obtenir les modèles disponibles pour la marque sélectionnée
+    const models = annonces
+      .filter(annonce => annonce.marque === selectedBrand)
+      .map(annonce => annonce.modele);
+
+    // Supprimer les doublons et trier les modèles
+    const uniqueModels = [...new Set(models)].sort();
+
+    // Ajouter une option vide par défaut
+    const defaultOption = document.createElement('option');
+    defaultOption.value = '';
+    defaultOption.textContent = 'Choisir un modèle';
+    modelSelect.appendChild(defaultOption);
+
+    // Ajouter les modèles à la liste déroulante
+    uniqueModels.forEach(model => {
       const option = document.createElement('option');
-      option.value = modele.fields['Nom du Modèle'].toLowerCase();
-      option.textContent = modele.fields['Nom du Modèle'];
+      option.value = model;
+      option.textContent = model.charAt(0).toUpperCase() + model.slice(1);
       modelSelect.appendChild(option);
     });
 
-    modelSelect.disabled = filteredModels.length === 0;
-  }
+    // Activer le filtre des modèles
+    modelSelect.disabled = uniqueModels.length === 0;
+    console.log('Modèles disponibles mis à jour :', uniqueModels);
+  });
 
-  async function loadAnnonces() {
-    annonces = await fetchData(annoncesUrl);
-  }
+  // Événement pour appliquer les filtres et afficher les annonces filtrées
+  filterButton.addEventListener('click', async function (event) {
+    event.preventDefault(); // Empêche la page de se rafraîchir automatiquement
+    console.log('Bouton "Appliquer les filtres" cliqué');
 
+    await fetchAnnonces(); // Assurez-vous de récupérer les annonces avant de filtrer
+
+    const selectedBrand = brandSelect.value.toLowerCase().trim();
+    const selectedModel = modelSelect.value.toLowerCase().trim();
+    const selectedGearbox = gearboxSelect.value.toLowerCase().trim();
+    const maxPrice = parseFloat(priceInput.value);
+
+    // Filtrer les annonces selon les critères sélectionnés
+    const filteredAnnonces = annonces.filter(annonce => {
+      const matchesBrand = selectedBrand ? annonce.marque === selectedBrand : true;
+      const matchesModel = selectedModel ? annonce.modele === selectedModel : true;
+      const matchesGearbox = selectedGearbox ? annonce.boite === selectedGearbox : true;
+      const matchesPrice = !isNaN(maxPrice) ? annonce.prix <= maxPrice : true;
+
+      return matchesBrand && matchesModel && matchesGearbox && matchesPrice;
+    });
+
+    console.log('Annonces filtrées :', filteredAnnonces);
+    displayAnnonces(filteredAnnonces);
+  });
+
+  // Fonction pour afficher les annonces
   function displayAnnonces(data) {
-    annoncesDiv.innerHTML = '';
+    annoncesDiv.innerHTML = ''; // Vider les annonces précédentes
     if (data.length > 0) {
       data.forEach(annonce => {
         const card = document.createElement('div');
         card.className = 'car-card';
         card.innerHTML = `
-          <img src="${annonce.fields.Image ? annonce.fields.Image[0].url : 'images/placeholder.jpg'}" alt="${annonce.fields.Modèle}" onerror="this.src='images/placeholder.jpg';" />
-          <h3>${annonce.fields.Marque.toUpperCase()} ${annonce.fields.Modèle}</h3>
-          <p>Année : ${annonce.fields.Année}</p>
-          <p>Boîte : ${annonce.fields.Boîte}</p>
-          <p>Prix : ${annonce.fields.Prix.toLocaleString()} €</p>
+          <img src="${annonce.image}" alt="${annonce.modele}" onerror="this.src='images/placeholder.jpg';" />
+          <h3>${annonce.marque.toUpperCase()} ${annonce.modele}</h3>
+          <p>Année : ${annonce.annee}</p>
+          <p>Boîte : ${annonce.boite}</p>
+          <p>Prix : ${annonce.prix.toLocaleString()} €</p>
         `;
         annoncesDiv.appendChild(card);
       });
@@ -81,31 +130,4 @@ document.addEventListener('DOMContentLoaded', function () {
       annoncesDiv.innerHTML = '<p>Aucune annonce ne correspond à vos critères.</p>';
     }
   }
-
-  filterButton.addEventListener('click', function (event) {
-    event.preventDefault();
-    const selectedBrand = brandSelect.value.toLowerCase().trim();
-    const selectedModel = modelSelect.value.toLowerCase().trim();
-    const selectedGearbox = gearboxSelect.value.toLowerCase().trim();
-    const maxPrice = parseFloat(priceInput.value);
-
-    const filteredAnnonces = annonces.filter(annonce => {
-      const matchesBrand = selectedBrand ? annonce.fields.Marque.toLowerCase() === selectedBrand : true;
-      const matchesModel = selectedModel ? annonce.fields.Modèle.toLowerCase() === selectedModel : true;
-      const matchesGearbox = selectedGearbox ? annonce.fields.Boîte.toLowerCase() === selectedGearbox : true;
-      const matchesPrice = !isNaN(maxPrice) ? annonce.fields.Prix <= maxPrice : true;
-      return matchesBrand && matchesModel && matchesGearbox && matchesPrice;
-    });
-
-    displayAnnonces(filteredAnnonces);
-  });
-
-  loadBrands();
-  loadModels();
-  loadAnnonces();
-
-  brandSelect.addEventListener('change', function () {
-    const selectedBrand = brandSelect.value.toLowerCase().trim();
-    loadModels(selectedBrand);
-  });
 });
