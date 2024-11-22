@@ -30,26 +30,16 @@ document.addEventListener('DOMContentLoaded', async function () {
       console.log('Données récupérées depuis Airtable :', data);
 
       annonces = data.records.map(record => {
-        let marque = "";
-        if (record.fields.Marque) {
-          if (Array.isArray(record.fields.Marque) && record.fields.Marque.length > 0) {
-            marque = record.fields.Marque[0].toLowerCase().trim();
-          }
+        let titre = "";
+        if (record.fields.Titre) {
+          titre = record.fields.Titre; // Utilisation du titre calculé directement
         }
-
-        let modele = "";
-        if (record.fields.Modèle) {
-          if (Array.isArray(record.fields.Modèle) && record.fields.Modèle.length > 0) {
-            modele = record.fields.Modèle[0].toLowerCase().trim();
-          }
-        }
-
-        console.log(`Marque récupérée : ${marque}, Modèle récupéré : ${modele}`);
 
         return {
           id: record.id,
-          marque: marque,
-          modele: modele,
+          titre: titre,
+          marque: record.fields.Marque ? (Array.isArray(record.fields.Marque) ? record.fields.Marque[0].toLowerCase().trim() : record.fields.Marque.toLowerCase().trim()) : "",
+          modele: record.fields.Modèle ? (Array.isArray(record.fields.Modèle) ? record.fields.Modèle[0].toLowerCase().trim() : record.fields.Modèle.toLowerCase().trim()) : "",
           annee: record.fields.Année,
           boite: record.fields.Boîte ? record.fields.Boîte.toLowerCase().trim() : "",
           prix: record.fields.Prix,
@@ -102,7 +92,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         card.className = 'car-card';
         card.innerHTML = `
           <img src="${annonce.image}" alt="${annonce.modele}" onerror="this.src='images/placeholder.jpg';" />
-          <h3>${annonce.marque ? annonce.marque.toUpperCase() : 'Marque inconnue'} ${annonce.modele ? annonce.modele : 'Modèle inconnu'}</h3>
+          <h3>${annonce.titre ? annonce.titre : 'Titre non disponible'}</h3>
           <p>Année : ${annonce.annee}</p>
           <p>Boîte : ${annonce.boite}</p>
           <p>Prix : ${typeof annonce.prix === 'number' ? annonce.prix.toLocaleString() : 'Prix non disponible'} €</p>
