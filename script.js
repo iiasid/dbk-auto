@@ -7,37 +7,44 @@ document.addEventListener('DOMContentLoaded', function () {
   const annoncesDiv = document.getElementById('annonces');
 
   // Jeton d'accès personnel Airtable et ID de la base
-  const apiKey = 'patLyS8zsrdPL46Q4.1d111902f9b96763a3f74e5c3aaa07003672b80e67486965609cfa02e741fdb3';
-  const baseId = 'apprRBKlK2tlPjFa4'; // Remplacez par l'ID de votre base Airtable
-  const tableName = 'Cars'; // Nom de la table dans Airtable
-  const apiUrl = `https://api.airtable.com/v0/${baseId}/${tableName}`;
+  const apiKey = 'patLyS8zsrdPL46Q4.1d111902f9b96763a3f74e5c3aaa07003672b80e67486965609cfa02e741fdb3'; // Assurez-vous que ce jeton est correct
+  const baseId = 'appRBKlK2tlPjFa4'; // ID exact de la base Airtable
+  const tableName = 'Cars'; // Nom exact de la table dans Airtable
+  const apiUrl = `https://api.airtable.com/v0/${baseId}/${tableName}`; // URL de l'API correcte
 
   let annonces = [];
 
   // Fonction pour récupérer les données depuis Airtable
   async function fetchAnnonces() {
     try {
+      console.log('Tentative de récupération des annonces depuis Airtable...');
       const response = await fetch(apiUrl, {
         headers: {
           Authorization: `Bearer ${apiKey}`
         }
       });
+      console.log('Réponse reçue :', response);
+
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
+
       const data = await response.json();
+      console.log('Données récupérées depuis Airtable :', data);
+      
       annonces = data.records.map(record => {
         return {
           id: record.id,
-          marque: record.fields.Marque.toLowerCase(),
-          modele: record.fields.Modèle.toLowerCase(),
+          marque: record.fields.Marque ? record.fields.Marque.toLowerCase() : "",
+          modele: record.fields.Modèle ? record.fields.Modèle.toLowerCase() : "",
           annee: record.fields.Année,
-          boite: record.fields.Boîte.toLowerCase(),
+          boite: record.fields.Boîte ? record.fields.Boîte.toLowerCase() : "",
           prix: record.fields.Prix,
           image: record.fields.Image ? record.fields.Image[0].url : 'images/placeholder.jpg'
         };
       });
-      console.log('Annonces récupérées depuis Airtable :', annonces);
+
+      console.log('Annonces après traitement :', annonces);
     } catch (error) {
       console.error('Erreur lors du chargement des annonces depuis Airtable :', error);
       annoncesDiv.innerHTML = '<p>Erreur lors du chargement des annonces. Veuillez réessayer plus tard.</p>';
@@ -66,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function () {
       return matchesBrand && matchesModel && matchesGearbox && matchesPrice;
     });
 
-    console.log('Annonces filtrées :', filteredAnnonces); // Log pour vérifier les annonces filtrées
+    console.log('Annonces filtrées :', filteredAnnonces);
     displayAnnonces(filteredAnnonces);
   });
 
