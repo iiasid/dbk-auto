@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Jeton d'accès personnel Airtable et ID de la base
   const apiKey = 'patLyS8zsrdPL46Q4.1d111902f9b96763a3f74e5c3aaa07003672b80e67486965609cfa02e741fdb3';
-  const baseId = 'appXXXXXXXXXXXXXXXX'; // Remplacez par l'ID de votre base Airtable
+  const baseId = 'apprRBKlK2tlPjFa4'; // Remplacez par l'ID de votre base Airtable
   const tableName = 'Cars'; // Nom de la table dans Airtable
   const apiUrl = `https://api.airtable.com/v0/${baseId}/${tableName}`;
 
