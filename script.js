@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', async function () {
-  const brandSelect = document.getElementById('Marque');
-  const modelSelect = document.getElementById('Modele');
+  const brandSelect = document.getElementById('brand');
+  const modelSelect = document.getElementById('model');
   const gearboxSelect = document.getElementById('gearbox');
   const priceInput = document.getElementById('price');
   const filterButton = document.getElementById('filter-btn');
@@ -67,6 +67,9 @@ document.addEventListener('DOMContentLoaded', async function () {
       console.log('Annonces après traitement :', annonces);
       displayAnnonces(annonces); // Afficher toutes les annonces initialement
 
+      // Charger les marques et modèles après récupération des annonces
+      loadBrands();
+      
     } catch (error) {
       console.error('Erreur lors du chargement des annonces depuis Airtable :', error);
       annoncesDiv.innerHTML = '<p>Erreur lors du chargement des annonces. Veuillez réessayer plus tard.</p>';
@@ -106,20 +109,61 @@ document.addEventListener('DOMContentLoaded', async function () {
     displayAnnonces(filteredAnnonces);
   }
 
+  // Charger les marques dans la liste déroulante
+  function loadBrands() {
+    // Extraire les marques uniques
+    const brands = [...new Set(annonces.map(annonce => annonce.marque))].filter(Boolean).sort();
+
+    // Vider les options précédentes
+    brandSelect.innerHTML = '<option value="">-- Choisir une marque --</option>';
+
+    // Ajouter les marques à la liste déroulante
+    brands.forEach(brand => {
+      const option = document.createElement('option');
+      option.value = brand;
+      option.textContent = brand.charAt(0).toUpperCase() + brand.slice(1);
+      brandSelect.appendChild(option);
+    });
+
+    // Ajouter l'événement pour mettre à jour les modèles
+    brandSelect.addEventListener('change', loadModels);
+  }
+
+  // Charger les modèles en fonction de la marque sélectionnée
+  function loadModels() {
+    const selectedBrand = brandSelect.value.toLowerCase().trim();
+    console.log('Marque sélectionnée :', selectedBrand);
+
+    // Vider la liste des modèles précédents
+    modelSelect.innerHTML = '<option value="">-- Choisir un modèle --</option>';
+
+    if (selectedBrand) {
+      // Filtrer les annonces pour obtenir les modèles disponibles pour la marque sélectionnée
+      const models = annonces
+        .filter(annonce => annonce.marque === selectedBrand)
+        .map(annonce => annonce.modele);
+
+      // Supprimer les doublons et trier les modèles
+      const uniqueModels = [...new Set(models)].filter(Boolean).sort();
+
+      // Ajouter les modèles à la liste déroulante
+      uniqueModels.forEach(model => {
+        const option = document.createElement('option');
+        option.value = model;
+        option.textContent = model.charAt(0).toUpperCase() + model.slice(1);
+        modelSelect.appendChild(option);
+      });
+
+      // Activer le filtre des modèles s'il y a des modèles disponibles
+      modelSelect.disabled = uniqueModels.length === 0;
+    } else {
+      modelSelect.disabled = true;
+    }
+  }
+
   // Fonction pour afficher les annonces
   function displayAnnonces(data) {
-    // Comparez les données actuelles avec les précédentes pour éviter des mises à jour inutiles
-    if (JSON.stringify(data) === JSON.stringify(annoncesDiv.dataset.previousData)) {
-      console.log("Aucune modification détectée, pas de redessin nécessaire");
-      return; // Si rien n'a changé, ne faites rien
-    }
-
-    // Enregistrez les données actuelles pour la prochaine comparaison
-    annoncesDiv.dataset.previousData = JSON.stringify(data);
-
-    // Mise à jour optimisée du DOM
     annoncesDiv.innerHTML = ''; // Vider les annonces précédentes
-
     if (data.length > 0) {
       data.forEach(annonce => {
         const card = document.createElement('div');
