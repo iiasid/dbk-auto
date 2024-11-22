@@ -55,6 +55,15 @@
     <div id="annonces"></div>
   </section>
 
+  card.innerHTML = `
+  <img src="${annonce.image}" alt="${annonce.modele}" onerror="this.src='images/placeholder.jpg';" />
+  <h3>${annonce.marque ? annonce.marque.toUpperCase() : 'Marque inconnue'} ${annonce.modele ? annonce.modele : 'Modèle inconnu'}</h3>
+  <p>Année : ${annonce.annee}</p>
+  <p>Boîte : ${annonce.boite}</p>
+  <p>Prix : ${typeof annonce.prix === 'number' ? annonce.prix.toLocaleString() : 'Prix non disponible'} €</p>
+`;
+
+
   <!-- Appel du script JS -->
   <script src="script.js"></script>
 </body>
