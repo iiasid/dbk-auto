@@ -6,6 +6,15 @@ document.addEventListener('DOMContentLoaded', async function () {
   const priceInput = document.getElementById('price');
   const filterButton = document.getElementById('filter-btn');
   const annoncesDiv = document.getElementById('annonces');
+  const burgerMenu = document.getElementById('burger-menu');
+  const navMenu = document.getElementById('nav-menu');
+
+  // Gérer le clic sur le bouton burger pour afficher/masquer le menu
+  if (burgerMenu) {
+    burgerMenu.addEventListener('click', function () {
+      navMenu.classList.toggle('show');
+    });
+  }
 
   // Informations d'accès Airtable
   const apiKey = 'patvWkfPXlYuM1jjN.cfb1c14a851bf57bd07ab645882e6362d9a88c833608abe53faffd1ddd6f1e44';
