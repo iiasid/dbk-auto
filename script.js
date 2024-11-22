@@ -8,15 +8,18 @@ document.addEventListener('DOMContentLoaded', async function () {
 
   // Jeton d'accès personnel Airtable et URL statique
   const apiKey = 'patvWkfPXlYuM1jjN.cfb1c14a851bf57bd07ab645882e6362d9a88c833608abe53faffd1ddd6f1e44';
-  const apiUrl = `https://api.airtable.com/v0/apprRBKlK2tlPjFa4/Annonces`;
+  const apiUrlAnnonces = `https://api.airtable.com/v0/apprRBKlK2tlPjFa4/Annonces`;
+  const apiUrlMarques = `https://api.airtable.com/v0/apprRBKlK2tlPjFa4/Marques`;
+  const apiUrlModeles = `https://api.airtable.com/v0/apprRBKlK2tlPjFa4/Modèles`;
 
   let annonces = [];
+  let marques = [];
+  let modeles = [];
 
-  // Fonction pour récupérer les annonces d'Airtable
-  async function fetchAnnonces() {
+  // Fonction pour récupérer les données depuis Airtable
+  async function fetchData(url) {
     try {
-      console.log('Tentative de récupération des annonces depuis Airtable...');
-      const response = await fetch(apiUrl, {
+      const response = await fetch(url, {
         headers: {
           Authorization: `Bearer ${apiKey}`
         }
@@ -27,57 +30,92 @@ document.addEventListener('DOMContentLoaded', async function () {
       }
 
       const data = await response.json();
-      console.log('Données récupérées depuis Airtable :', data);
+      return data.records;
 
-      annonces = data.records.map(record => {
-        console.log('Champs récupérés :', record.fields);  // Ajouter un log pour vérifier les champs récupérés
+    } catch (error) {
+      console.error('Erreur lors du chargement des données depuis Airtable :', error);
+      return [];
+    }
+  }
 
-        let titre = record.fields['Titre'] || 'Titre non disponible';
+  // Charger les annonces depuis Airtable
+  async function fetchAnnonces() {
+    annonces = await fetchData(apiUrlAnnonces);
+    annonces = annonces.map(record => {
+      let titre = record.fields['Titre'] || 'Titre non disponible';
 
-        let marque = "";
-        if (record.fields['Marque']) {
-          if (Array.isArray(record.fields['Marque']) && record.fields['Marque'].length > 0) {
-            marque = record.fields['Marque'][0].toLowerCase().trim();
-          } else if (typeof record.fields['Marque'] === 'string') {
-            marque = record.fields['Marque'].toLowerCase().trim();
-          }
-        }
+      return {
+        id: record.id,
+        titre: titre,
+        marque: record.fields['Marque'] ? record.fields['Marque'][0] : "",
+        modele: record.fields['Modèle'] ? record.fields['Modèle'][0] : "",
+        annee: record.fields['Année'],
+        boite: record.fields['Boîte'] ? record.fields['Boîte'].toLowerCase().trim() : "",
+        prix: record.fields['Prix'],
+        image: record.fields['Image'] ? record.fields['Image'][0].url : 'images/placeholder.jpg'
+      };
+    });
 
-        let modele = "";
-        if (record.fields['Modèle']) {
-          if (Array.isArray(record.fields['Modèle']) && record.fields['Modèle'].length > 0) {
-            modele = record.fields['Modèle'][0].toLowerCase().trim();
-          } else if (typeof record.fields['Modèle'] === 'string') {
-            modele = record.fields['Modèle'].toLowerCase().trim();
-          }
-        }
+    displayAnnonces(annonces);
+  }
 
-        return {
-          id: record.id,
-          titre: titre,
-          marque: marque,
-          modele: modele,
-          annee: record.fields['Année'],
-          boite: record.fields['Boîte'] ? record.fields['Boîte'].toLowerCase().trim() : "",
-          prix: record.fields['Prix'],
-          image: record.fields['Image'] ? record.fields['Image'][0].url : 'images/placeholder.jpg'
-        };
+  // Charger les marques et remplir le filtre des marques
+  async function loadBrands() {
+    marques = await fetchData(apiUrlMarques);
+    // Extraire les noms de marques uniques
+    const uniqueMarques = [...new Set(marques.map(marque => marque.fields['Nom de la Marque']))].sort();
+
+    // Vider les options précédentes
+    brandSelect.innerHTML = '<option value="">-- Choisir une marque --</option>';
+
+    // Ajouter les marques à la liste déroulante
+    uniqueMarques.forEach(brand => {
+      const option = document.createElement('option');
+      option.value = brand.toLowerCase().trim();
+      option.textContent = brand;
+      brandSelect.appendChild(option);
+    });
+
+    // Ajouter l'événement pour mettre à jour les modèles
+    brandSelect.addEventListener('change', loadModels);
+  }
+
+  // Charger les modèles en fonction de la marque sélectionnée
+  async function loadModels() {
+    const selectedBrand = brandSelect.value.toLowerCase().trim();
+    console.log('Marque sélectionnée :', selectedBrand);
+
+    if (selectedBrand) {
+      modeles = await fetchData(apiUrlModeles);
+      // Filtrer les modèles pour la marque sélectionnée
+      const filteredModeles = modeles.filter(model => model.fields['Marque Associée'].toLowerCase().trim() === selectedBrand);
+      const uniqueModels = [...new Set(filteredModeles.map(model => model.fields['Nom du Modèle']))].sort();
+
+      // Vider la liste des modèles précédents
+      modelSelect.innerHTML = '<option value="">-- Choisir un modèle --</option>';
+
+      // Ajouter les modèles à la liste déroulante
+      uniqueModels.forEach(model => {
+        const option = document.createElement('option');
+        option.value = model.toLowerCase().trim();
+        option.textContent = model;
+        modelSelect.appendChild(option);
       });
 
-      console.log('Annonces après traitement :', annonces);
-      displayAnnonces(annonces); // Afficher toutes les annonces initialement
-
-      // Charger les marques et modèles après récupération des annonces
-      loadBrands();
-      
-    } catch (error) {
-      console.error('Erreur lors du chargement des annonces depuis Airtable :', error);
-      annoncesDiv.innerHTML = '<p>Erreur lors du chargement des annonces. Veuillez réessayer plus tard.</p>';
+      // Activer le filtre des modèles s'il y a des modèles disponibles
+      modelSelect.disabled = uniqueModels.length === 0;
+    } else {
+      // Si aucune marque n'est sélectionnée, désactiver le filtre des modèles
+      modelSelect.disabled = true;
+      modelSelect.innerHTML = '<option value="">-- Choisir un modèle --</option>';
     }
   }
 
   // Charger les annonces une seule fois au démarrage
   await fetchAnnonces();
+  
+  // Charger les marques une fois les annonces chargées
+  await loadBrands();
 
   // Appliquer les filtres localement sur les annonces déjà récupérées
   filterButton.addEventListener('click', function (event) {
@@ -97,8 +135,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // Filtrer les annonces en fonction des critères sélectionnés
     const filteredAnnonces = annonces.filter(annonce => {
-      const matchesBrand = selectedBrand ? annonce.marque === selectedBrand : true;
-      const matchesModel = selectedModel ? annonce.modele === selectedModel : true;
+      const matchesBrand = selectedBrand ? annonce.marque.toLowerCase().trim() === selectedBrand : true;
+      const matchesModel = selectedModel ? annonce.modele.toLowerCase().trim() === selectedModel : true;
       const matchesGearbox = selectedGearbox ? annonce.boite === selectedGearbox : true;
       const matchesPrice = !isNaN(maxPrice) ? annonce.prix <= maxPrice : true;
 
@@ -107,58 +145,6 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     console.log('Annonces filtrées :', filteredAnnonces);
     displayAnnonces(filteredAnnonces);
-  }
-
-  // Charger les marques dans la liste déroulante
-  function loadBrands() {
-    // Extraire les marques uniques
-    const brands = [...new Set(annonces.map(annonce => annonce.marque))].filter(Boolean).sort();
-
-    // Vider les options précédentes
-    brandSelect.innerHTML = '<option value="">-- Choisir une marque --</option>';
-
-    // Ajouter les marques à la liste déroulante
-    brands.forEach(brand => {
-      const option = document.createElement('option');
-      option.value = brand;
-      option.textContent = brand.charAt(0).toUpperCase() + brand.slice(1);
-      brandSelect.appendChild(option);
-    });
-
-    // Ajouter l'événement pour mettre à jour les modèles
-    brandSelect.addEventListener('change', loadModels);
-  }
-
-  // Charger les modèles en fonction de la marque sélectionnée
-  function loadModels() {
-    const selectedBrand = brandSelect.value.toLowerCase().trim();
-    console.log('Marque sélectionnée :', selectedBrand);
-
-    // Vider la liste des modèles précédents
-    modelSelect.innerHTML = '<option value="">-- Choisir un modèle --</option>';
-
-    if (selectedBrand) {
-      // Filtrer les annonces pour obtenir les modèles disponibles pour la marque sélectionnée
-      const models = annonces
-        .filter(annonce => annonce.marque === selectedBrand)
-        .map(annonce => annonce.modele);
-
-      // Supprimer les doublons et trier les modèles
-      const uniqueModels = [...new Set(models)].filter(Boolean).sort();
-
-      // Ajouter les modèles à la liste déroulante
-      uniqueModels.forEach(model => {
-        const option = document.createElement('option');
-        option.value = model;
-        option.textContent = model.charAt(0).toUpperCase() + model.slice(1);
-        modelSelect.appendChild(option);
-      });
-
-      // Activer le filtre des modèles s'il y a des modèles disponibles
-      modelSelect.disabled = uniqueModels.length === 0;
-    } else {
-      modelSelect.disabled = true;
-    }
   }
 
   // Fonction pour afficher les annonces
