@@ -30,20 +30,37 @@ document.addEventListener('DOMContentLoaded', async function () {
       console.log('Données récupérées depuis Airtable :', data);
 
       annonces = data.records.map(record => {
-        let titre = "";
-        if (record.fields.Titre) {
-          titre = record.fields.Titre; // Utilisation du titre calculé directement
+        console.log('Champs récupérés :', record.fields);  // Ajouter un log pour vérifier les champs récupérés
+
+        let titre = record.fields['Titre'] || 'Titre non disponible';
+
+        let marque = "";
+        if (record.fields['Marque']) {
+          if (Array.isArray(record.fields['Marque']) && record.fields['Marque'].length > 0) {
+            marque = record.fields['Marque'][0].toLowerCase().trim();
+          } else if (typeof record.fields['Marque'] === 'string') {
+            marque = record.fields['Marque'].toLowerCase().trim();
+          }
+        }
+
+        let modele = "";
+        if (record.fields['Modèle']) {
+          if (Array.isArray(record.fields['Modèle']) && record.fields['Modèle'].length > 0) {
+            modele = record.fields['Modèle'][0].toLowerCase().trim();
+          } else if (typeof record.fields['Modèle'] === 'string') {
+            modele = record.fields['Modèle'].toLowerCase().trim();
+          }
         }
 
         return {
           id: record.id,
           titre: titre,
-          marque: record.fields.Marque ? (Array.isArray(record.fields.Marque) ? record.fields.Marque[0].toLowerCase().trim() : record.fields.Marque.toLowerCase().trim()) : "",
-          modele: record.fields.Modèle ? (Array.isArray(record.fields.Modèle) ? record.fields.Modèle[0].toLowerCase().trim() : record.fields.Modèle.toLowerCase().trim()) : "",
-          annee: record.fields.Année,
-          boite: record.fields.Boîte ? record.fields.Boîte.toLowerCase().trim() : "",
-          prix: record.fields.Prix,
-          image: record.fields.Image ? record.fields.Image[0].url : 'images/placeholder.jpg'
+          marque: marque,
+          modele: modele,
+          annee: record.fields['Année'],
+          boite: record.fields['Boîte'] ? record.fields['Boîte'].toLowerCase().trim() : "",
+          prix: record.fields['Prix'],
+          image: record.fields['Image'] ? record.fields['Image'][0].url : 'images/placeholder.jpg'
         };
       });
 
@@ -64,6 +81,12 @@ document.addEventListener('DOMContentLoaded', async function () {
     event.preventDefault();
     console.log('Bouton "Appliquer les filtres" cliqué');
 
+    // Appliquer les filtres sans recharger les données depuis Airtable
+    applyFilters();
+  });
+
+  // Fonction pour appliquer les filtres localement
+  function applyFilters() {
     const selectedBrand = brandSelect.value.toLowerCase().trim();
     const selectedModel = modelSelect.value.toLowerCase().trim();
     const selectedGearbox = gearboxSelect.value.toLowerCase().trim();
@@ -81,7 +104,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     console.log('Annonces filtrées :', filteredAnnonces);
     displayAnnonces(filteredAnnonces);
-  });
+  }
 
   // Fonction pour afficher les annonces
   function displayAnnonces(data) {
@@ -92,7 +115,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         card.className = 'car-card';
         card.innerHTML = `
           <img src="${annonce.image}" alt="${annonce.modele}" onerror="this.src='images/placeholder.jpg';" />
-          <h3>${annonce.titre ? annonce.titre : 'Titre non disponible'}</h3>
+          <h3>${annonce.titre}</h3>
           <p>Année : ${annonce.annee}</p>
           <p>Boîte : ${annonce.boite}</p>
           <p>Prix : ${typeof annonce.prix === 'number' ? annonce.prix.toLocaleString() : 'Prix non disponible'} €</p>
