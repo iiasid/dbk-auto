@@ -6,13 +6,13 @@ document.addEventListener('DOMContentLoaded', async function () {
   const filterButton = document.getElementById('filter-btn');
   const annoncesDiv = document.getElementById('annonces');
 
-  // Jeton d'accès personnel Airtable et URL statique pour vérifier le problème
+  // Jeton d'accès personnel Airtable et URL statique
   const apiKey = 'patvWkfPXlYuM1jjN.cfb1c14a851bf57bd07ab645882e6362d9a88c833608abe53faffd1ddd6f1e44';
-  const apiUrl = `https://api.airtable.com/v0/apprRBKlK2tlPjFa4/Annonces`; // URL complète avec baseId et tableName
+  const apiUrl = `https://api.airtable.com/v0/apprRBKlK2tlPjFa4/Annonces`;
 
   let annonces = [];
 
-  // Fonction pour récupérer les données depuis Airtable
+  // Fonction pour récupérer les annonces d'Airtable
   async function fetchAnnonces() {
     try {
       console.log('Tentative de récupération des annonces depuis Airtable...');
@@ -21,7 +21,6 @@ document.addEventListener('DOMContentLoaded', async function () {
           Authorization: `Bearer ${apiKey}`
         }
       });
-      console.log('Réponse reçue :', response);
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -45,7 +44,7 @@ document.addEventListener('DOMContentLoaded', async function () {
           }
         }
 
-        console.log(`Marque : ${marque}, Modèle : ${modele}`); // Log pour vérifier
+        console.log(`Marque récupérée : ${marque}, Modèle récupéré : ${modele}`);
 
         return {
           id: record.id,
@@ -59,7 +58,7 @@ document.addEventListener('DOMContentLoaded', async function () {
       });
 
       console.log('Annonces après traitement :', annonces);
-      displayAnnonces(annonces); // Afficher toutes les annonces une première fois
+      displayAnnonces(annonces); // Afficher toutes les annonces initialement
 
     } catch (error) {
       console.error('Erreur lors du chargement des annonces depuis Airtable :', error);
@@ -70,9 +69,9 @@ document.addEventListener('DOMContentLoaded', async function () {
   // Charger les annonces une seule fois au démarrage
   await fetchAnnonces();
 
-  // Appliquer les filtres sans recharger les annonces depuis Airtable
+  // Appliquer les filtres localement sur les annonces déjà récupérées
   filterButton.addEventListener('click', function (event) {
-    event.preventDefault(); // Empêche la page de se rafraîchir automatiquement
+    event.preventDefault();
     console.log('Bouton "Appliquer les filtres" cliqué');
 
     const selectedBrand = brandSelect.value.toLowerCase().trim();
@@ -80,7 +79,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     const selectedGearbox = gearboxSelect.value.toLowerCase().trim();
     const maxPrice = parseFloat(priceInput.value);
 
-    // Filtrer les annonces selon les critères sélectionnés
+    // Filtrer les annonces en fonction des critères sélectionnés
     const filteredAnnonces = annonces.filter(annonce => {
       const matchesBrand = selectedBrand ? annonce.marque === selectedBrand : true;
       const matchesModel = selectedModel ? annonce.modele === selectedModel : true;
