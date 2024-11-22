@@ -9,12 +9,18 @@ body {
 
 /* Header avec logo et menu de navigation */
 header {
+  background-color: #0d6efd;
+  color: white;
+  padding: 10px 0;
+}
+
+.header-container {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px;
-  background-color: #0d6efd;
-  color: white;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
 .logo-container {
@@ -27,16 +33,15 @@ header {
 
 .menu {
   flex: 2;
-  text-align: center;
 }
 
 .menu ul {
   list-style-type: none;
-  padding: 0;
-  margin: 0;
   display: flex;
-  gap: 20px;
-  justify-content: center;
+  justify-content: flex-end;
+  gap: 30px;
+  margin: 0;
+  padding: 0;
 }
 
 .menu li {
@@ -47,10 +52,13 @@ header {
   text-decoration: none;
   color: white;
   font-weight: bold;
-  transition: color 0.3s ease;
+  padding: 10px 15px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  border-radius: 5px;
 }
 
 .menu a:hover {
+  background-color: #0056b3;
   color: #ffdd57; /* Couleur pour mettre en surbrillance le lien au survol */
 }
 
@@ -67,4 +75,97 @@ header {
   max-width: 1100px;
 }
 
-/* Rest of the CSS remains unchanged... */
+/* Catalogue section */
+#catalogue {
+  margin: 30px auto;
+  padding: 20px;
+  max-width: 1100px;
+}
+
+#catalogue h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 1.8rem;
+  color: #333;
+}
+
+#annonces {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+/* Car cards */
+.car-card {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  text-align: center;
+  width: 250px;
+  padding: 15px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.car-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.car-card img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+.car-card h3 {
+  font-size: 1.2rem;
+  margin: 10px 0;
+}
+
+.car-card p {
+  font-size: 0.9rem;
+  margin: 5px 0;
+  color: #666;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .header-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .menu ul {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .menu a {
+    display: block;
+    width: 100%;
+    text-align: center;
+  }
+
+  #filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter {
+    flex: 1 1 100%;
+  }
+
+  #annonces {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .car-card {
+    width: 90%;
+    margin: 10px 0;
+  }
+}
