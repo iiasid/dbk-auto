@@ -1,46 +1,96 @@
-[
-  {
-    "id": 1,
-    "marque": "toyota",
-    "modele": "Yaris",
-    "annee": 2009,
-    "boite": "manuelle",
-    "prix": 6000,
-    "image": "https://www.bernauto.com/wp-content/uploads/2023/03/Mercedes-C220cdi2018_01.jpg"
-  {
-    "id": 2,
-    "marque": "bmw",
-    "modele": "X2",
-    "annee": 2020,
-    "boite": "automatique",
-    "prix": 35000,
-    "image": "https://mad4wheels.com/img/bmw-x2-2020.jpg"
-  },
-  {
-    "id": 3,
-    "marque": "renault",
-    "modele": "Twingo",
-    "annee": 2018,
-    "boite": "manuelle",
-    "prix": 9000,
-    "image": "https://mad4wheels.com/img/renault-twingo-2018.jpg"
-  },
-  {
-    "id": 4,
-    "marque": "mercedes",
-    "modele": "C220",
-    "annee": 2009,
-    "boite": "automatique",
-    "prix": 24300,
-    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/2007_Mercedes-Benz_C220_CDI_Avantgde_Automatic_Facelift_2.2.jpg/1600px-2007_Mercedes-Benz_C220_CDI_Avantgde_Automatic_Facelift_2.2.jpg"
-  },
-  {
-    "id": 5,
-    "marque": "renault",
-    "modele": "Express",
-    "annee": 1990,
-    "boite": "manuelle",
-    "prix": 1500,
-    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Renault_Express_%2828148647998%29.jpg/1471px-Renault_Express_%2828148647998%29.jpg"
+document.addEventListener('DOMContentLoaded', function () {
+  const brandSelect = document.getElementById('brand');
+  const modelSelect = document.getElementById('model');
+  const gearboxSelect = document.getElementById('gearbox');
+  const priceInput = document.getElementById('price');
+  const filterButton = document.getElementById('filter-btn');
+  const annoncesDiv = document.getElementById('annonces');
+
+  let annonces = [];
+
+  // Charger les annonces depuis le JSON
+  fetch('annonces.json')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      annonces = data;
+      console.log('Annonces chargées :', annonces); // Log des annonces pour vérifier la récupération
+      displayAnnonces(annonces); // Afficher toutes les annonces par défaut
+    })
+    .catch(error => {
+      console.error('Erreur lors du chargement des annonces :', error);
+      annoncesDiv.innerHTML = '<p>Erreur lors du chargement des annonces. Veuillez réessayer plus tard.</p>';
+    });
+
+  // Mise à jour de la liste des modèles selon la marque
+  brandSelect.addEventListener('change', function () {
+    const brand = brandSelect.value.toLowerCase();
+    modelSelect.innerHTML = '<option value="">-- Choisir un modèle --</option>';
+    modelSelect.disabled = true;
+
+    if (brand) {
+      modelSelect.disabled = false;
+
+      const models = {
+        toyota: ['Yaris', 'Corolla', 'Hilux', 'Land Cruiser', 'Auris'],
+        bmw: ['X2', '3 Series', 'X5', 'M3', 'Z4'],
+        renault: ['Twingo', 'Clio', 'Megane', 'Scenic', 'Express'],
+        mercedes: ['C220', 'E-Class', 'S-Class', 'C-Class', 'A-Class'],
+        peugeot: ['208', '3008', '508', '5008', 'Partner']
+      };
+
+      const selectedModels = models[brand] || [];
+      selectedModels.forEach(model => {
+        const option = document.createElement('option');
+        option.value = model.toLowerCase();
+        option.textContent = model;
+        modelSelect.appendChild(option);
+      });
+    }
+  });
+
+  // Appliquer les filtres et afficher les annonces filtrées
+  filterButton.addEventListener('click', function () {
+    const selectedBrand = brandSelect.value.toLowerCase();
+    const selectedModel = modelSelect.value.toLowerCase();
+    const selectedGearbox = gearboxSelect.value.toLowerCase();
+    const maxPrice = parseFloat(priceInput.value);
+
+    const filteredAnnonces = annonces.filter(annonce => {
+      const matchesBrand = selectedBrand ? annonce.marque === selectedBrand : true;
+      const matchesModel = selectedModel ? annonce.modele.toLowerCase() === selectedModel : true;
+      const matchesGearbox = selectedGearbox ? annonce.boite === selectedGearbox : true;
+      const matchesPrice = !isNaN(maxPrice) ? annonce.prix <= maxPrice : true;
+
+      return matchesBrand && matchesModel && matchesGearbox && matchesPrice;
+    });
+
+    console.log('Annonces filtrées :', filteredAnnonces); // Log pour vérifier le filtrage
+    displayAnnonces(filteredAnnonces);
+  });
+
+  // Fonction pour afficher les annonces
+  function displayAnnonces(data) {
+    annoncesDiv.innerHTML = ''; // Vider les annonces précédentes
+    if (data.length > 0) {
+      data.forEach(annonce => {
+        const card = document.createElement('div');
+        card.className = 'car-card';
+        card.innerHTML = `
+          <img src="${annonce.image}" alt="${annonce.modele}" onerror="this.src='images/placeholder.jpg';" />
+          <h3>${annonce.marque.toUpperCase()} ${annonce.modele}</h3>
+          <p>Année : ${annonce.annee}</p>
+          <p>Boîte : ${annonce.boite}</p>
+          <p>Prix : ${annonce.prix.toLocaleString()} €</p>
+        `;
+        annoncesDiv.appendChild(card);
+      });
+    } else {
+      annoncesDiv.innerHTML = '<p>Aucune annonce ne correspond à vos critères.</p>';
+    }
   }
-]
+});
