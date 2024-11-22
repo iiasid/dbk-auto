@@ -7,10 +7,10 @@ document.addEventListener('DOMContentLoaded', function () {
   const annoncesDiv = document.getElementById('annonces');
 
   // Jeton d'accès personnel Airtable et ID de la base
-  const apiKey = 'patLyS8zsrdPL46Q4.1d111902f9b96763a3f74e5c3aaa07003672b80e67486965609cfa02e741fdb3'; // Assurez-vous que ce jeton est correct
+  const apiKey = 'patLyS8zsrdPL46Q4.1d111902f9b96763a3f74e5c3aaa07003672b80e67486965609cfa02e741fdb3';
   const baseId = 'appRBKlK2tlPjFa4'; // ID exact de la base Airtable
   const tableName = 'Cars'; // Nom exact de la table dans Airtable
-  const apiUrl = `https://api.airtable.com/v0/${baseId}/${tableName}`; // URL de l'API correcte
+  const apiUrl = `https://api.airtable.com/v0/${baseId}/${tableName}`;
 
   let annonces = [];
 
@@ -35,10 +35,10 @@ document.addEventListener('DOMContentLoaded', function () {
       annonces = data.records.map(record => {
         return {
           id: record.id,
-          marque: record.fields.Marque ? record.fields.Marque.toLowerCase() : "",
-          modele: record.fields.Modèle ? record.fields.Modèle.toLowerCase() : "",
+          marque: record.fields.Marque ? record.fields.Marque.toLowerCase().trim() : "",
+          modele: record.fields.Modèle ? record.fields.Modèle.toLowerCase().trim() : "",
           annee: record.fields.Année,
-          boite: record.fields.Boîte ? record.fields.Boîte.toLowerCase() : "",
+          boite: record.fields.Boîte ? record.fields.Boîte.toLowerCase().trim() : "",
           prix: record.fields.Prix,
           image: record.fields.Image ? record.fields.Image[0].url : 'images/placeholder.jpg'
         };
@@ -58,9 +58,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     await fetchAnnonces(); // Assurez-vous de récupérer les annonces avant de filtrer
 
-    const selectedBrand = brandSelect.value.toLowerCase();
-    const selectedModel = modelSelect.value.toLowerCase();
-    const selectedGearbox = gearboxSelect.value.toLowerCase();
+    const selectedBrand = brandSelect.value.toLowerCase().trim();
+    const selectedModel = modelSelect.value.toLowerCase().trim();
+    const selectedGearbox = gearboxSelect.value.toLowerCase().trim();
     const maxPrice = parseFloat(priceInput.value);
 
     // Filtrer les annonces selon les critères sélectionnés
