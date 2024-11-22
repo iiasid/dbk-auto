@@ -45,6 +45,8 @@ header {
   border: none;
   color: white;
   cursor: pointer;
+  position: relative; /* S'assurer qu'il est positionné correctement */
+  z-index: 10; /* Le placer au-dessus du reste pour qu'il soit visible */
 }
 
 /* Menu de navigation (desktop) */
