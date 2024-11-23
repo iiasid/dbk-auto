@@ -8,28 +8,29 @@
 </head>
 <body>
 
- <!-- En-tête du site avec logo et menu de navigation -->
-<header>
-  <div class="header-container">
-    <!-- Logo cliquable : Ajouter un lien autour du logo -->
-    <div class="logo-container">
-      <a href="index.html">
-        <img src="https://i.ibb.co/ypW8txz/logodbk.png" alt="Logo de DBK Auto" class="logo">
-      </a>
+  <!-- Include the header -->
+  <header>
+    <div class="header-container">
+      <div class="logo-container">
+        <a href="index.html">
+          <img src="images/logo.png" alt="Logo de DBK Auto" class="logo">
+        </a>
+      </div>
+      <button id="burger-menu" class="burger-menu" aria-label="Menu">
+        ☰
+      </button>
+      <nav class="menu" id="nav-menu">
+        <ul>
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="annonces.html">Annonces</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
     </div>
-    <nav class="menu">
-      <ul>
-        <li><a href="index.html">Accueil</a></li>
-        <li><a href="annonces.html">Annonces</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
-    </nav>
-  </div>
-</header>
+  </header>
 
   <!-- Section des filtres -->
   <section id="filters">
-    <h2>Filtrer les annonces</h2>
     <div class="filter">
       <label for="brand">Marque</label>
       <select id="brand" name="brand">
@@ -58,7 +59,9 @@
       <input type="number" id="price" name="price" placeholder="Entrez le prix maximum">
     </div>
 
-    <button id="filter-btn">Appliquer les filtres</button>
+    <button id="filter-btn" aria-label="Rechercher">
+      <img src="images/search-icon.png" alt="Recherche" class="search-icon">
+    </button>
   </section>
 
   <!-- Section du catalogue -->
