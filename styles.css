@@ -41,17 +41,14 @@ header {
 /* Bouton menu burger (visible uniquement sur mobile) */
 .burger-menu {
   display: none;
+  font-size: 2rem;
   background: none;
   border: none;
+  color: white;
   cursor: pointer;
   position: absolute;
   right: 20px;
   z-index: 10;
-}
-
-.burger-menu img {
-  width: 25px; /* Taille ajustée de l'icône du menu burger */
-  height: 25px; /* Taille plus petite et cohérente avec les autres icônes */
 }
 
 /* Menu de navigation (desktop) */
@@ -59,7 +56,7 @@ header {
   flex-grow: 1;
 }
 
-.menu-desktop {
+.menu ul {
   list-style-type: none;
   display: flex;
   justify-content: flex-end;
@@ -68,11 +65,11 @@ header {
   padding: 0;
 }
 
-.menu-desktop li {
+.menu li {
   list-style: none;
 }
 
-.menu-desktop a {
+.menu a {
   text-decoration: none;
   color: white;
   font-weight: bold;
@@ -81,35 +78,47 @@ header {
   border-radius: 4px;
 }
 
-.menu-desktop a:hover {
+.menu a:hover {
   background-color: #0056b3;
   color: #ffdd57;
 }
 
-/* Menu de navigation mobile */
-.menu-mobile {
-  display: none; /* Par défaut, on cache les icônes du menu mobile */
-  flex-direction: column;
-  align-items: center;
-  gap: 15px;
-  padding: 10px;
-  background-color: #0d6efd;
-  position: absolute;
-  right: 20px;
-  top: 60px; /* Juste en dessous du header */
-  border-radius: 5px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  z-index: 15; /* Assurer que le menu est au-dessus du reste */
-}
+/* Styles spécifiques pour mobile (max-width: 768px) */
+@media (max-width: 768px) {
+  .header-container {
+    position: relative;
+  }
 
-.menu-mobile li img {
-  width: 30px; /* Taille des icônes du menu mobile */
-  height: 30px;
+  .burger-menu {
+    display: block;
+  }
+
+  .menu {
+    display: none;
+    position: absolute;
+    top: 70px;
+    right: 0;
+    background-color: #0d6efd;
+    padding: 20px;
+    border-radius: 8px;
+    width: 200px;
+    z-index: 5;
+  }
+
+  .menu ul {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .menu.show {
+    display: block;
+  }
 }
 
 /* Conteneur de la section filters */
 #filters-container {
-  background: url('https://i.ibb.co/yRJ5WYC/impression-garage-automobile.jpg') no-repeat center center;
+  background: url('https://cdn.jdpower.com/Pros%20And%20Cons%20Of%20A%20Dealer%20Trade.jpg') no-repeat center center;
   background-size: cover;
   height: 50vh; /* Prendre la moitié de la hauteur de l'écran */
   padding: 20px 0; /* Padding en haut et en bas uniquement */
@@ -290,16 +299,10 @@ button#filter-btn:hover {
     align-items: center;
   }
 
-  .burger-menu {
-    display: block; /* Afficher le menu burger sur mobile */
-  }
-
-  .menu-desktop {
-    display: none; /* Cacher le menu texte sur mobile */
-  }
-
-  .menu-mobile.show {
-    display: flex; /* Afficher le menu icônes quand la classe 'show' est ajoutée */
+  .menu ul {
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
   }
 
   #filters-container {
