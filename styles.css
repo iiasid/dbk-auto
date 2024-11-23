@@ -38,6 +38,19 @@ header {
   object-fit: contain;
 }
 
+/* Bouton menu burger (visible uniquement sur mobile) */
+.burger-menu {
+  display: none;
+  font-size: 2rem;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  position: absolute;
+  right: 20px;
+  z-index: 10;
+}
+
 /* Menu de navigation (desktop) */
 .menu {
   flex-grow: 1;
@@ -68,6 +81,40 @@ header {
 .menu a:hover {
   background-color: #0056b3;
   color: #ffdd57;
+}
+
+/* Styles spécifiques pour mobile (max-width: 768px) */
+@media (max-width: 768px) {
+  .burger-menu {
+    display: block;
+  }
+
+  .menu {
+    display: none;
+    position: absolute;
+    top: 70px;
+    right: 0;
+    background-color: #0d6efd;
+    padding: 20px;
+    border-radius: 8px;
+    width: 200px;
+    z-index: 5;
+  }
+
+  .menu ul {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .menu.show {
+    display: block; /* Afficher le menu quand la classe 'show' est ajoutée */
+  }
+
+  .menu li img {
+    width: 30px; /* Taille des icônes dans le menu burger */
+    height: 30px;
+  }
 }
 
 /* Conteneur de la section filters */
@@ -244,48 +291,4 @@ button#filter-btn:hover {
 
 #contact form button:hover {
   background-color: #0056b3;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .header-container {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .menu ul {
-    flex-direction: column;
-    gap: 10px;
-    align-items: center;
-  }
-
-  #filters-container {
-    height: 100vh; /* Prendre toute la hauteur de l'écran en mobile */
-    padding: 20px;
-  }
-
-  #filters {
-    flex-direction: column;
-    align-items: stretch;
-    padding: 15px;
-  }
-
-  .filter {
-    flex: 1 1 100%;
-  }
-
-  button#filter-btn {
-    width: 100%;
-    height: auto;
-  }
-
-  #annonces {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .car-card {
-    width: 90%;
-    margin: 10px 0;
-  }
 }
