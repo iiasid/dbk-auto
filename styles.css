@@ -12,7 +12,7 @@ header {
   background-color: #0d6efd;
   color: white;
   padding: 10px 20px;
-  position: relative; /* Assurez-vous que le header est bien positionné */
+  position: relative;
 }
 
 .header-container {
@@ -33,9 +33,9 @@ header {
 }
 
 .logo {
-  height: 50px; /* Taille du logo */
-  max-width: 100%; /* Empêcher le logo de dépasser sa propre largeur */
-  object-fit: contain; /* Garder la proportion du logo */
+  height: 50px;
+  max-width: 100%;
+  object-fit: contain;
 }
 
 /* Bouton menu burger (visible uniquement sur mobile) */
@@ -47,8 +47,8 @@ header {
   color: white;
   cursor: pointer;
   position: absolute;
-  right: 20px; /* Assurez-vous que le burger est bien aligné à droite */
-  z-index: 10; /* Assurez-vous que le bouton est bien au-dessus des autres éléments */
+  right: 20px;
+  z-index: 10;
 }
 
 /* Menu de navigation (desktop) */
@@ -80,7 +80,7 @@ header {
 
 .menu a:hover {
   background-color: #0056b3;
-  color: #ffdd57; /* Couleur pour mettre en surbrillance le lien au survol */
+  color: #ffdd57;
 }
 
 /* Styles spécifiques pour mobile (max-width: 768px) */
@@ -90,19 +90,19 @@ header {
   }
 
   .burger-menu {
-    display: block; /* Afficher le bouton menu burger sur mobile */
+    display: block;
   }
 
   .menu {
-    display: none; /* Cacher le menu de navigation par défaut sur mobile */
+    display: none;
     position: absolute;
-    top: 70px; /* Positionner juste en dessous du header */
+    top: 70px;
     right: 0;
     background-color: #0d6efd;
     padding: 20px;
     border-radius: 8px;
-    width: 200px; /* Ajuster la largeur du menu en fonction de la taille de l'écran */
-    z-index: 5; /* S'assurer que le menu est au-dessus des autres éléments, mais en dessous du bouton */
+    width: 200px;
+    z-index: 5;
   }
 
   .menu ul {
@@ -112,32 +112,27 @@ header {
   }
 
   .menu.show {
-    display: block; /* Afficher le menu quand la classe 'show' est ajoutée */
+    display: block;
   }
 }
 
 /* Filters section */
 #filters {
-  background-color: white;
-  padding: 10px; /* Réduit la taille du padding */
-  margin: 10px auto; /* Réduit la marge */
+  background: url('garagedbk.jpg') no-repeat center center;
+  background-size: cover;
+  padding: 20px; /* Adjust padding for spacing */
+  margin: 20px auto;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-wrap: wrap;
-  gap: 10px; /* Réduit l'écart entre les éléments */
+  gap: 10px;
   justify-content: space-between;
-  max-width: 900px; /* Réduit la largeur maximale */
+  max-width: 900px;
+  border-radius: 15px; /* Rounded corners for the entire filters section */
 }
 
 .filter {
-  flex: 1 1 150px; /* Réduit la taille minimale de chaque filtre */
-}
-
-.filter label {
-  font-size: 1rem;
-  font-weight: bold;
-  margin-bottom: 8px;
-  display: block;
+  flex: 1 1 150px;
 }
 
 .filter select,
@@ -146,7 +141,7 @@ header {
   padding: 10px;
   font-size: 1rem;
   border: 1px solid #ddd;
-  border-radius: 5px;
+  border-radius: 10px; /* Rounded corners for individual filters */
   outline: none;
 }
 
@@ -157,19 +152,20 @@ header {
 
 /* Bouton de recherche */
 button#filter-btn {
-  flex: 1 1 50px; /* Ajuste la taille du bouton */
+  flex: 1 1 50px;
   padding: 10px;
   background-color: #0d6efd;
   color: white;
   border: none;
-  border-radius: 0; /* Le bouton est maintenant carré */
+  border-radius: 10px; /* Rounded corners for the search button */
   cursor: pointer;
   transition: background-color 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 50px;
-  height: 50px; /* Rend le bouton de recherche carré */
+  height: 50px;
+  margin-top: 10px;
 }
 
 button#filter-btn:hover {
@@ -177,7 +173,7 @@ button#filter-btn:hover {
 }
 
 .search-icon {
-  width: 20px; /* Ajuster la taille de l'icône de recherche */
+  width: 20px;
   height: 20px;
 }
 
@@ -299,10 +295,16 @@ button#filter-btn:hover {
   #filters {
     flex-direction: column;
     align-items: stretch;
+    padding: 15px;
   }
 
   .filter {
     flex: 1 1 100%;
+  }
+
+  button#filter-btn {
+    width: 100%;
+    height: auto;
   }
 
   #annonces {
