@@ -17,11 +17,14 @@
           <img src="https://i.ibb.co/ypW8txz/logodbk.png" alt="Logo de DBK Auto" class="logo">
         </a>
       </div>
+      <button class="burger-menu" onclick="toggleMenu()">
+        <img src="icon-burger-menu.png" alt="Menu Burger">
+      </button>
       <nav class="menu">
         <ul>
-          <li><a href="index.html">Accueil</a></li>
-          <li><a href="annonces.html">Annonces</a></li>
-          <li><a href="contact.html">Contact</a></li>
+          <li><a href="index.html"><img src="accueil-icon.png" alt="Accueil"></a></li>
+          <li><a href="annonces.html"><img src="annonces-icon.png" alt="Annonces"></a></li>
+          <li><a href="contact.html"><img src="contact-icon.png" alt="Contact"></a></li>
         </ul>
       </nav>
     </div>
@@ -67,5 +70,11 @@
 
   <!-- Appel du script JS -->
   <script src="script.js"></script>
+  <script>
+    function toggleMenu() {
+      const menu = document.querySelector('.menu');
+      menu.classList.toggle('show');
+    }
+  </script>
 </body>
 </html>
