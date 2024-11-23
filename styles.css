@@ -119,9 +119,9 @@ header {
 
   /* Bouton de recherche en mode mobile */
   button#filter-btn {
-    width: 100%; /* Prend toute la largeur sur mobile */
-    height: auto; /* Hauteur ajustée */
-    margin-top: 10px;
+    width: calc(100% - 20px); /* Prend toute la largeur sur mobile avec une marge pour les bords */
+    margin: 10px; /* Ajoute un peu de marge pour éviter de toucher les bords */
+    height: 50px; /* Hauteur ajustée pour rester cohérent avec le reste */
   }
 }
 
