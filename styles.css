@@ -38,19 +38,6 @@ header {
   object-fit: contain;
 }
 
-/* Bouton menu burger (visible uniquement sur mobile) */
-.burger-menu {
-  display: none;
-  font-size: 2rem;
-  background: none;
-  border: none;
-  color: white;
-  cursor: pointer;
-  position: absolute;
-  right: 20px;
-  z-index: 10;
-}
-
 /* Menu de navigation (desktop) */
 .menu {
   flex-grow: 1;
@@ -81,39 +68,6 @@ header {
 .menu a:hover {
   background-color: #0056b3;
   color: #ffdd57;
-}
-
-/* Styles spécifiques pour mobile (max-width: 768px) */
-@media (max-width: 768px) {
-  .header-container {
-    position: relative;
-  }
-
-  .burger-menu {
-    display: block;
-  }
-
-  .menu {
-    display: none;
-    position: absolute;
-    top: 70px;
-    right: 0;
-    background-color: #0d6efd;
-    padding: 20px;
-    border-radius: 8px;
-    width: 200px;
-    z-index: 5;
-  }
-
-  .menu ul {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  .menu.show {
-    display: block;
-  }
 }
 
 /* Conteneur de la section filters */
