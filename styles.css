@@ -118,7 +118,7 @@ header {
 
 /* Conteneur de la section filters */
 #filters-container {
-  background: url('garagedbk.jpg') no-repeat center center;
+  background: url('https://i.ibb.co/yRJ5WYC/impression-garage-automobile.jpg') no-repeat center center;
   background-size: cover;
   padding: 40px; /* Pour donner de l'espace autour de la section des filtres */
   display: flex;
