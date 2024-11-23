@@ -118,7 +118,7 @@ header {
 
 /* Conteneur de la section filters */
 #filters-container {
-  background: url('https://i.ibb.co/yRJ5WYC/impression-garage-automobile.jpg') no-repeat center center;
+  background: url('https://cdn.jdpower.com/Pros%20And%20Cons%20Of%20A%20Dealer%20Trade.jpg') no-repeat center center;
   background-size: cover;
   padding: 20px 0; /* Padding en haut et en bas uniquement */
   display: flex;
@@ -143,7 +143,8 @@ header {
 }
 
 .filter {
-  flex: 1 1 150px;
+  flex: 1 1 calc(25% - 20px); /* Assurez-vous que chaque filtre occupe un quart de la largeur avec une petite marge entre eux */
+  box-sizing: border-box;
 }
 
 .filter select,
@@ -163,7 +164,7 @@ header {
 
 /* Bouton de recherche */
 button#filter-btn {
-  flex: 1 1 50px;
+  flex: 1 1 calc(25% - 20px); /* Même taille que les autres filtres pour qu'il soit aligné */
   padding: 10px;
   background-color: #0d6efd;
   color: white;
@@ -174,9 +175,8 @@ button#filter-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 50px;
+  width: 100%; /* S'adapte à la taille du conteneur */
   height: 50px;
-  margin-top: 10px;
 }
 
 button#filter-btn:hover {
