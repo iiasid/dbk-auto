@@ -41,14 +41,17 @@ header {
 /* Bouton menu burger (visible uniquement sur mobile) */
 .burger-menu {
   display: none;
-  font-size: 2rem;
   background: none;
   border: none;
-  color: white;
   cursor: pointer;
   position: absolute;
   right: 20px;
   z-index: 10;
+}
+
+.burger-menu img {
+  width: 30px; /* Taille ajustée de l'icône du menu burger */
+  height: 30px; /* Même taille que les autres icônes du menu */
 }
 
 /* Menu de navigation (desktop) */
