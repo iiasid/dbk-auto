@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
   // Fonction pour remplir le filtre des marques
   function populateBrandFilter(brands) {
-    brandSelect.innerHTML = '<option value="">-- Choisir une marque --</option>';
+    brandSelect.innerHTML = '<option value="">Marque</option>';
     brands.forEach(brand => {
       const option = document.createElement('option');
       option.value = brand;
@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
   // Fonction pour remplir le filtre des modèles
   function populateModelFilter(models) {
-    modelSelect.innerHTML = '<option value="">-- Choisir un modèle --</option>';
+    modelSelect.innerHTML = '<option value="">Modèle</option>';
     models.forEach(model => {
       const option = document.createElement('option');
       option.value = model;
