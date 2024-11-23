@@ -191,9 +191,9 @@ button#filter-btn:hover {
 
 /* Catalogue section */
 #catalogue {
-  margin: 30px auto;
+  margin: 30px 0;
   padding: 20px;
-  max-width: 1100px;
+  width: 100%; /* Prendre toute la largeur de la page */
 }
 
 #catalogue h2 {
@@ -208,6 +208,7 @@ button#filter-btn:hover {
   flex-wrap: wrap;
   gap: 20px;
   justify-content: center;
+  width: 100%; /* Prendre toute la largeur de l'écran */
 }
 
 /* Car cards */
