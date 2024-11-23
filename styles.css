@@ -120,13 +120,13 @@ header {
 #filters-container {
   background: url('https://i.ibb.co/yRJ5WYC/impression-garage-automobile.jpg') no-repeat center center;
   background-size: cover;
-  padding: 40px; /* Pour donner de l'espace autour de la section des filtres */
+  padding: 20px 0; /* Padding en haut et en bas uniquement */
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 20px; /* Coins arrondis pour le conteneur */
-  margin: 20px auto;
-  max-width: 1000px; /* Ajuster la largeur maximum du conteneur */
+  border-radius: 0; /* Coins carrés pour le conteneur */
+  margin: 0; /* Pas de marge pour coller au header */
+  width: 100%; /* Prendre toute la largeur de la page */
 }
 
 /* Filters section */
