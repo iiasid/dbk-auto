@@ -87,8 +87,6 @@ header {
 @media (max-width: 768px) {
   .header-container {
     position: relative;
-    flex-direction: column;
-    align-items: center;
   }
 
   .burger-menu {
@@ -115,13 +113,6 @@ header {
 
   .menu.show {
     display: block; /* Afficher le menu quand la classe 'show' est ajoutée */
-  }
-
-  /* Bouton de recherche en mode mobile */
-  button#filter-btn {
-    width: calc(100% - 20px); /* Prend toute la largeur sur mobile avec une marge pour les bords */
-    margin: 10px; /* Ajoute un peu de marge pour éviter de toucher les bords */
-    height: 50px; /* Hauteur ajustée pour rester cohérent avec le reste */
   }
 }
 
