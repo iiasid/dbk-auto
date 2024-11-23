@@ -50,8 +50,8 @@ header {
 }
 
 .burger-menu img {
-  width: 30px; /* Taille ajustée de l'icône du menu burger */
-  height: 30px; /* Même taille que les autres icônes du menu */
+  width: 25px; /* Taille ajustée de l'icône du menu burger */
+  height: 25px; /* Taille plus petite et cohérente avec les autres icônes */
 }
 
 /* Menu de navigation (desktop) */
@@ -59,7 +59,7 @@ header {
   flex-grow: 1;
 }
 
-.menu ul {
+.menu-desktop {
   list-style-type: none;
   display: flex;
   justify-content: flex-end;
@@ -68,11 +68,11 @@ header {
   padding: 0;
 }
 
-.menu li {
+.menu-desktop li {
   list-style: none;
 }
 
-.menu a {
+.menu-desktop a {
   text-decoration: none;
   color: white;
   font-weight: bold;
@@ -81,43 +81,30 @@ header {
   border-radius: 4px;
 }
 
-.menu a:hover {
+.menu-desktop a:hover {
   background-color: #0056b3;
   color: #ffdd57;
 }
 
-/* Styles spécifiques pour mobile (max-width: 768px) */
-@media (max-width: 768px) {
-  .burger-menu {
-    display: block;
-  }
+/* Menu de navigation mobile */
+.menu-mobile {
+  display: none; /* Par défaut, on cache les icônes du menu mobile */
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  padding: 10px;
+  background-color: #0d6efd;
+  position: absolute;
+  right: 20px;
+  top: 60px; /* Juste en dessous du header */
+  border-radius: 5px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 15; /* Assurer que le menu est au-dessus du reste */
+}
 
-  .menu {
-    display: none;
-    position: absolute;
-    top: 70px;
-    right: 0;
-    background-color: #0d6efd;
-    padding: 20px;
-    border-radius: 8px;
-    width: 200px;
-    z-index: 5;
-  }
-
-  .menu ul {
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-  }
-
-  .menu.show {
-    display: block; /* Afficher le menu quand la classe 'show' est ajoutée */
-  }
-
-  .menu li img {
-    width: 30px; /* Taille des icônes dans le menu burger */
-    height: 30px;
-  }
+.menu-mobile li img {
+  width: 30px; /* Taille des icônes du menu mobile */
+  height: 30px;
 }
 
 /* Conteneur de la section filters */
@@ -294,4 +281,54 @@ button#filter-btn:hover {
 
 #contact form button:hover {
   background-color: #0056b3;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .header-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .burger-menu {
+    display: block; /* Afficher le menu burger sur mobile */
+  }
+
+  .menu-desktop {
+    display: none; /* Cacher le menu texte sur mobile */
+  }
+
+  .menu-mobile.show {
+    display: flex; /* Afficher le menu icônes quand la classe 'show' est ajoutée */
+  }
+
+  #filters-container {
+    height: 100vh; /* Prendre toute la hauteur de l'écran en mobile */
+    padding: 20px;
+  }
+
+  #filters {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 15px;
+  }
+
+  .filter {
+    flex: 1 1 100%;
+  }
+
+  button#filter-btn {
+    width: 100%;
+    height: auto;
+  }
+
+  #annonces {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .car-card {
+    width: 90%;
+    margin: 10px 0;
+  }
 }
