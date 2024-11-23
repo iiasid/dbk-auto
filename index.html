@@ -8,18 +8,16 @@
 </head>
 <body>
 
-  <!-- Include the header -->
+  <!-- En-tête du site avec logo et menu de navigation -->
   <header>
     <div class="header-container">
+      <!-- Logo cliquable : Ajouter un lien autour du logo -->
       <div class="logo-container">
         <a href="index.html">
           <img src="https://i.ibb.co/ypW8txz/logodbk.png" alt="Logo de DBK Auto" class="logo">
         </a>
       </div>
-      <button id="burger-menu" class="burger-menu" aria-label="Menu">
-        ☰
-      </button>
-      <nav class="menu" id="nav-menu">
+      <nav class="menu">
         <ul>
           <li><a href="index.html">Accueil</a></li>
           <li><a href="annonces.html">Annonces</a></li>
@@ -32,35 +30,31 @@
   <!-- Section des filtres -->
   <section id="filters">
     <div class="filter">
-      <label for="brand">Marque</label>
-      <select id="brand" name="brand">
-        <option value="">-- Choisir une marque --</option>
+      <select id="brand" name="brand" placeholder="Marque">
+        <option value="">Marque</option>
       </select>
     </div>
 
     <div class="filter">
-      <label for="model">Modèle</label>
-      <select id="model" name="model" disabled>
-        <option value="">-- Choisir un modèle --</option>
+      <select id="model" name="model" disabled placeholder="Modèle">
+        <option value="">Modèle</option>
       </select>
     </div>
 
     <div class="filter">
-      <label for="gearbox">Boîte</label>
-      <select id="gearbox" name="gearbox">
-        <option value="">-- Choisir la boîte --</option>
+      <select id="gearbox" name="gearbox" placeholder="Boîte">
+        <option value="">Boîte</option>
         <option value="manuelle">Manuelle</option>
         <option value="automatique">Automatique</option>
       </select>
     </div>
 
     <div class="filter">
-      <label for="price">Prix Max (€)</label>
-      <input type="number" id="price" name="price" placeholder="Entrez le prix maximum">
+      <input type="number" id="price" name="price" placeholder="Prix Max (€)">
     </div>
 
-    <button id="filter-btn" aria-label="Rechercher">
-      <img src="https://i.ibb.co/tzQqCZj/search-removebg-preview.png" alt="Recherche" class="search-icon">
+    <button id="filter-btn">
+      <img src="images/search-icon.png" alt="Recherche" class="search-icon">
     </button>
   </section>
 
