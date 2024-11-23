@@ -12,6 +12,7 @@ header {
   background-color: #0d6efd;
   color: white;
   padding: 10px 20px;
+  position: relative; /* Assurez-vous que le header est bien positionné */
 }
 
 .header-container {
@@ -45,8 +46,9 @@ header {
   border: none;
   color: white;
   cursor: pointer;
-  position: relative; /* S'assurer qu'il est positionné correctement */
-  z-index: 10; /* Le placer au-dessus du reste pour qu'il soit visible */
+  position: absolute;
+  right: 20px; /* Assurez-vous que le burger est bien aligné à droite */
+  z-index: 10; /* Assurez-vous que le bouton est bien au-dessus des autres éléments */
 }
 
 /* Menu de navigation (desktop) */
@@ -83,6 +85,14 @@ header {
 
 /* Styles spécifiques pour mobile (max-width: 768px) */
 @media (max-width: 768px) {
+  .header-container {
+    position: relative;
+  }
+
+  .burger-menu {
+    display: block; /* Afficher le bouton menu burger sur mobile */
+  }
+
   .menu {
     display: none; /* Cacher le menu de navigation par défaut sur mobile */
     position: absolute;
@@ -91,16 +101,14 @@ header {
     background-color: #0d6efd;
     padding: 20px;
     border-radius: 8px;
+    width: 200px; /* Ajuster la largeur du menu en fonction de la taille de l'écran */
+    z-index: 5; /* S'assurer que le menu est au-dessus des autres éléments, mais en dessous du bouton */
   }
 
   .menu ul {
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
-  }
-
-  .burger-menu {
-    display: block; /* Afficher le bouton menu burger sur mobile */
   }
 
   .menu.show {
@@ -111,18 +119,18 @@ header {
 /* Filters section */
 #filters {
   background-color: white;
-  padding: 10px;
-  margin: 10px auto;
+  padding: 10px; /* Réduit la taille du padding */
+  margin: 10px auto; /* Réduit la marge */
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 10px; /* Réduit l'écart entre les éléments */
   justify-content: space-between;
-  max-width: 900px;
+  max-width: 900px; /* Réduit la largeur maximale */
 }
 
 .filter {
-  flex: 1 1 200px;
+  flex: 1 1 150px; /* Réduit la taille minimale de chaque filtre */
 }
 
 .filter label {
@@ -147,24 +155,30 @@ header {
   border-color: #0d6efd;
 }
 
+/* Bouton de recherche */
 button#filter-btn {
-  flex: 1 1 50px;
+  flex: 1 1 50px; /* Ajuste la taille du bouton */
   padding: 10px;
   background-color: #0d6efd;
   color: white;
   border: none;
-  border-radius: 0;
+  border-radius: 0; /* Le bouton est maintenant carré */
   cursor: pointer;
   transition: background-color 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 50px;
-  height: 50px;
+  height: 50px; /* Rend le bouton de recherche carré */
 }
 
 button#filter-btn:hover {
   background-color: #0056b3;
+}
+
+.search-icon {
+  width: 20px; /* Ajuster la taille de l'icône de recherche */
+  height: 20px;
 }
 
 /* Catalogue section */
